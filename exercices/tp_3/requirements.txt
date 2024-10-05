@@ -1,0 +1,12 @@
+# Streamlit
+streamlit
+
+# API
+fastapi
+pydantic
+uvicorn
+pydantic
+requests
+python-dotenv==1.0.1
+
+# TODO Install the required dependencies
