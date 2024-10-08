@@ -26,7 +26,7 @@ build-and-deply-cloudrun-api:
 		--platform=managed \
 		--region=europe-west1 \
 		--allow-unauthenticated \
-		--set-env-vars GOOGLE_API_KEY="AIzaSyDzbEZFIJVQvdl8Q1whBhni7CDnBLh2Qe0",DB_PASSWORD="@5KiIUIbzM@lQUs"\
+		--set-env-vars GOOGLE_API_KEY=[GOOGLE_API_KEY],DB_PASSWORD=[DB_PASSWORD]\
 		--port=8181
 
 build-and-deply-cloudrun-streamlit:
