@@ -108,7 +108,8 @@ gcloud run deploy <my-app-name> \
     --image=<my-region>-docker.pkg.dev/<my-project-id>/<my-registry-name>/<my-docker-image-name>:latest \
     --platform=managed \
     --region=<my-region> \
-    --allow-unauthenticated
+    --allow-unauthenticated \
+    --port=8181
 ```
 
 - Change the HOST in you streamlit app.py to the url of the Fast API
