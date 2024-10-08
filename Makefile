@@ -17,13 +17,21 @@ deploy-cloud-run:
 		--region=europe-west1 \
 		--allow-unauthenticated
 
-build-docker-both-apps:
+build-and-deply-cloudrun-api:
 	# Build and push FastAPI image
-	docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/fb-api:latest -f Dockerfile_api ..
+	docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/fb-api:latest -f Dockerfile_api .
 
+	gcloud run deploy fb-api \
+		--image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/fb-api:latest \
+		--platform=managed \
+		--region=europe-west1 \
+		--allow-unauthenticated \
+		--set-env-vars GOOGLE_API_KEY="AIzaSyDzbEZFIJVQvdl8Q1whBhni7CDnBLh2Qe0",DB_PASSWORD="@5KiIUIbzM@lQUs"\
+		--port=8181
+
+build-and-deply-cloudrun-streamlit:
 	# Build and push Streamlit image
-	docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/fb-st:latest -f Dockerfile_streamlit ..
-
+	docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/fb-streamlit:latest .
 
 	gcloud run deploy fb-streamlit \
 		--image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/fb-streamlit:latest \
