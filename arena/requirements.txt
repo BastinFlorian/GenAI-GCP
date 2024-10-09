@@ -1,0 +1,6 @@
+pg8000
+SQLAlchemy==2.0.7
+gradio
+cloud-sql-python-connector
+SQLAlchemy==2.0.7
+python-dotenv
