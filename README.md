@@ -1,36 +1,39 @@
 # How to use this repository
 
-## Expectations from Dauphine AI students
+This repository contains exercises to help you deploy a RAG application in GCP.
 
-### Evaluation criteria
-- The quality of the code (add Flake8 and Pytlint linters to your settings.json and use the warning to improve your code)
-- The clean code principles:
-  - use the PEP8 standard
-  - use the following pratices:
-    - use of type hints
-    - use of docstrings only if needed
-    - use of classes and functions
-    - one function should do one thing
-- The GCP deployed applications:
-  - The application should be deployed in GCP
-  - The interface should be working as expected
-  - You should not have mutliples applications deployed at the same time
+## Expectations from Dauphine AI Students
 
+### Evaluation Criteria
+- **Code Quality**: Add `Flake8` and `Pylint` linters to your `settings.json` and use the warnings to improve your code.
+- **Clean Code Principles**:
+    - Follow the PEP8 standard.
+    - Adopt the following practices:
+        - Use type hints.
+        - Use docstrings only if needed.
+        - Utilize classes and functions.
+        - Ensure each function performs a single task.
+- **GCP Deployed Applications**:
+    - The application should be deployed in GCP.
+    - The interface should function as expected.
+    - Avoid deploying multiple applications simultaneously.
 
-### How to submit your work
+### How to Submit Your Work
 - TODO
 
-### Mandatory steps
-- Anything you deploy, create in GCP should have your initials at the beggining
-## Pre-requisites
+### Mandatory Steps
+- Prefix anything you deploy or create in GCP with your initials.
 
-- Python 3.11 or higher [here](https://www.python.org/downloads/)
-- Conda or Miniconda [here](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
-- Docker [here](https://docs.docker.com/get-docker/)
-- VS Code [here](https://code.visualstudio.com/download)
-- GCloud SDK [here](https://cloud.google.com/sdk/docs/install)
+## Prerequisites
 
-## Create your virtual environment
+- [Python 3.11 or higher](https://www.python.org/downloads/)
+- [Conda or Miniconda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)
+- [Docker](https://docs.docker.com/get-docker/)
+- [VS Code](https://code.visualstudio.com/download)
+- [GCloud SDK](https://cloud.google.com/sdk/docs/install)
+- [Cloud SQL Proxy](https://cloud.google.com/sql/docs/mysql/sql-proxy#install)
+
+## Create Your Virtual Environment
 
 ```bash
 conda create --name genai_gcp python=3.11
@@ -46,9 +49,10 @@ gcloud auth login
 gcloud auth application-default login # Authenticate on GCP with admin account
 ```
 
-## Command used ONLY by the teacher to create the required objects in GCP
+## Commands Used ONLY by the Teacher to Create Required Objects in GCP
 
-- Configure API, IAM and Service Account
+### Configure API, IAM, and Service Account
+
 ```bash
 gcloud init # Use your email and project settings
 gcloud auth application-default login # Authenticate on GCP with admin account
@@ -57,40 +61,37 @@ cd terraform/bootstrap
 vim backend.tf
 # Edit <my-tfstate-bucket> with the name of the bucket created above
 vim terraform.tfvars
-# Edit the values of project_id, location, artifactregistry_name and service_account_name
+# Edit the values of project_id, location, artifactregistry_name, and service_account_name
 terraform init # You need storage.buckets.list permission (ex: roles/storage.objectUser)
 terraform apply -var gcp_account_email="<my-user-email>"
-# return the service account to be copu next line
+# Return the service account to be copied next line
 export GOOGLE_IMPERSONATE_SERVICE_ACCOUNT=<my-service-account>@<my-project-id>.iam.gserviceaccount.com
 ```
 
-# About the exercices
+## About the Exercises
 
-This repository contains the exercises to help you deploy a RAG application in GCP.
-You will have to complete the exercises in the following order:
-- `tp_1` explains how to create a basic streamlit app in CloudRun
-- `tp_2` explains how to split the backend and frontend of your app and deploy in Cloud Run
-- `tp_3` explains how to use Gemini LLM to create a basic question answering app without external knowledge
-- `tp_4` explains how to create and fill a Cloud SQL instance with the data needed for the RAG model:
-  - Loading the data in Google Cloud Storage
-  - Chunking the data with Google Cloud Functions and adding it to the Cloud SQL instance
-  - Updating the data with Google Cloud Functions when new data is added to the bucket
-- `tp_5` explains how to use this data hosted in Cloud SQL to improve your question answering app
-- `tp_6` explains how to use the RAG model to improve your question answering app
-- `tp_7` explains how collect user feedback from you app and store them in BigQuery
-- `tp_8` show the alternatives of architeecture that can be used to deploy the RAG model in production
-  - Using Dialogflow
+This repository contains exercises to help you deploy a RAG application in GCP. Complete the exercises in the following order:
+| TP Number | Link | Description |
+|-----------|------|-------------|
+| 1 | [Open exercice](./exercices/tp_1) | Create a basic Streamlit app in Cloud Run. |
+| 2 | [Open exercice](./exercices/tp_2) | Split the backend and frontend of your app and deploy in Cloud Run. |
+| 3 | [Open exercice](./exercices/tp_3) | Use Gemini LLM to create a basic question-answering app without external knowledge. |
+| 4 | [Open exercice](./exercices/tp_4) | Create and fill a Cloud SQL instance with the data needed for the RAG model: <ul><li>Load the data in Google Cloud Storage.</li><li>Chunk the data with Google Cloud Functions and add it to the Cloud SQL instance.</li><li>Update the data with Google Cloud Functions when new data is added to the bucket.</li></ul> |
+| 5 | [Open exercice](./exercices/tp_5) | Use this data hosted in Cloud SQL to improve your question-answering app. |
+| 6 | [Open exercice](./exercices/tp_6) | Use the RAG model to improve your question-answering app. |
+| 7 | [Open exercice](./exercices/tp_7) | Collect user feedback from your app and store it in BigQuery. |
+| 8 | [Open exercice](./exercices/tp_8) | Explore alternative architectures for deploying the RAG model in production, such as using Dialogflow. |
 
-## Roadmap:
-- Terraform Cloud SQL instance and db ingestion
-- Terraform User
+## Roadmap
+- Terraform Cloud SQL instance and DB ingestion.
+- Terraform User IAM.
 
 ### Troubleshooting
 
-You will encouters a lot of errors when developing. Don't worry it's part of the learning process.
-A few hints on how to solve them:
+You will encounter many errors during development. Don't worry; it's part of the learning process. Here are a few hints on how to solve them:
+
 ```bash
 - ERROR: Cannot connect to the Docker daemon # Docker app is not opened
-- A env variable is not recongized # Check the .env file, run source .env in the terminal, load_dotenv() in the python file
-
+- An env variable is not recognized # Check the .env file, run source .env in the terminal, load_dotenv() in the Python file
 ```
+
