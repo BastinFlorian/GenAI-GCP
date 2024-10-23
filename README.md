@@ -19,7 +19,10 @@ This repository contains exercises to help you deploy a RAG application in GCP.
     - Avoid deploying multiple applications simultaneously.
 
 ### How to Submit Your Work
-- TODO
+- Create a branch with your name : `git checkout -b <your-name>`.
+- Commit your work in the branch : `git add . && git commit -m "Your message"`.
+- Push your branch to the repository : `git push origin <your-name>`.
+- Create a pull request from your branch to the `dev` branch.
 
 ### Mandatory Steps
 - Prefix anything you deploy or create in GCP with your initials.
@@ -88,10 +91,18 @@ This repository contains exercises to help you deploy a RAG application in GCP. 
 
 ### Troubleshooting
 
-You will encounter many errors during development. Don't worry; it's part of the learning process. Here are a few hints on how to solve them:
+You will encounter many errors during development. Don't worry: it's part of the learning process. Here are a few hints on how to solve them:
 
 ```bash
 - ERROR: Cannot connect to the Docker daemon # Docker app is not opened
 - An env variable is not recognized # Check the .env file, run source .env in the terminal, load_dotenv() in the Python file
 ```
 
+Role errors:
+```bash
+# PERMISSION_DENIED: Permission 'iam.serviceAccounts.getIamPolicy' denied on resource
+# Command can only be done by an admin
+gcloud iam service-accounts add-iam-policy-binding 1021317796643-compute@developer.gserviceaccount.com \
+    --member="user:bastinflorian1@gmail.com" \
+    --role="roles/iam.serviceAccountUser"
+```
