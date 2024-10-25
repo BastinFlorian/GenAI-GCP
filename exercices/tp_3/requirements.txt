@@ -9,4 +9,14 @@ pydantic
 requests
 python-dotenv==1.0.1
 
-# TODO Install the required dependencies
+# TODO Install the required dependencieslangchain_google_genai
+langchain-core
+datasets
+aiohttp
+dill
+fsspec[http]
+pyarrow-hotfix
+xxhash
+google-auth
+google-api-python-client
+google-ai-generativelanguage
