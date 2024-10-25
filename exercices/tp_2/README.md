@@ -20,7 +20,7 @@ docker network create my_network
 Build and run the FastAPI container:
 ```bash
 docker build -t api:latest -f Dockerfile_api .
-docker run --name fastapi-container -p 8181:8181 api:latest
+docker run --name fastapi-container --network my_network -p 8181:8181 api:latest
 # Open the localhost URL given
 ```
 
@@ -94,14 +94,14 @@ docker-compose up --build
 # Replace <my-docker-image-name> and <my-app-name> with your initials + _api
 # Example: Florian Bastin -> <my-docker-image-name>fb_api
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<my-docker-name>:latest -f Dockerfile_api .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-api:latest -f Dockerfile_api .
 
 # Be careful, the default port is 8080 for Cloud Run.
 # If you encounter an error message, edit the default Cloud Run port on the interface or in the command line
-gcloud run deploy <my-app-name> \
-        --image=<my-region>-docker.pkg.dev/<my-project-id>/<my-registry-name>/<my-docker-image-name>:latest \
+gcloud run deploy malekmak-api \
+        --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-api:latest \
         --platform=managed \
-        --region=<my-region> \
+        --region=europe-west1 \
         --allow-unauthenticated \
         --port=8181
 ```
@@ -116,11 +116,11 @@ Example: `HOST = "https://fb-1021317796643.europe-west1.run.app/answer"`
 # Replace <my-docker-image-name> and <my-app-name> with your initials + _streamlit
 # Example: Florian Bastin -> <my-docker-image-name>fb_streamlit
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<my-docker-name>:latest -f Dockerfile .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-streamlit:latest -f Dockerfile .
 
-gcloud run deploy <my-app-name> \
-        --image=<my-region>-docker.pkg.dev/<my-project-id>/<my-registry-name>/<my-docker-image-name>:latest \
+gcloud run deploy malekmak-streamlit \
+        --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-streamlit:latest \
         --platform=managed \
-        --region=<my-region> \
+        --region=europe-west1 \
         --allow-unauthenticated
 ```

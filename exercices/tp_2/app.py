@@ -1,19 +1,25 @@
 """Streamlit app"""
+
 import streamlit as st
 import requests
 
-# TODO
-# HOST = "http://[container_name]:[host]/answer"
+HOST = "https://malekmak-api-1021317796643.europe-west1.run.app/answer"
 
-st.title('Hello, Streamlit!')
-message = st.text_input('Say something')
+st.title("Hello, Streamlit!")
+
+st.sidebar.header("Preferences")
+language = st.sidebar.selectbox("Select Preferred Language", ("English", "Français"))
+if language == "English":
+    gender = st.sidebar.selectbox("Select Gender", ("Man", "Woman"))
+elif language == "Français":
+    gender = st.sidebar.selectbox("Choisir Genre", ("Homme", "Femme"))
+else:
+    gender = st.sidebar.selectbox("Select Gender", ("Man", "Woman"))
+
+message = st.text_input("Please enter your name")
 if message:
-    # TODO
     response = requests.post(
-        HOST,
-        ...
-        json=...,
-        timeout=20
+        HOST, json={"name": message, "genre": gender, "language": language}, timeout=20
     )
     if response.status_code == 200:
         st.write(response.json()["message"])

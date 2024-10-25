@@ -67,10 +67,10 @@ gcloud auth configure-docker europe-west1-docker.pkg.dev
 # Replace <my-docker-image-name> and <my-app-name> with your initials + -streamlit
 # Example: Florian Bastin -> <my-docker-image-name>=fb-streamlit
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/<my-project-id>/<my-registry-name>/<my-docker-image-name>:latest -f Dockerfile .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-streamlit:latest -f Dockerfile .
 
-gcloud run deploy <my-app-name> \
-        --image=europe-west1-docker.pkg.dev/<my-project-id>/<my-registry-name>/<my-docker-image-name>:latest \
+gcloud run deploy malekmak-streamlit \
+        --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-streamlit:latest \
         --platform=managed \
         --region=europe-west1 \
         --allow-unauthenticated

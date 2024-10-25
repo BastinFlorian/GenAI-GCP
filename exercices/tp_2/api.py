@@ -1,7 +1,7 @@
 """API"""
+
 from fastapi import FastAPI
 from pydantic import BaseModel
-
 
 app = FastAPI()
 
@@ -15,7 +15,10 @@ class UserInput(BaseModel):
         genre (str): The genre preference of the user.
         language (str): The language preference of the user.
     """
-    # TODO fill the required attributes
+
+    name: str
+    genre: str
+    language: str
 
 
 @app.post("/answer")
@@ -27,5 +30,18 @@ def answer(user_input: UserInput):
     Returns:
         dict: A dictionary containing a greeting message.
     """
-    # TODO edit the implementation to match the required ouput from #1
-    return {"message": f"Hello Mr {user_input.name} from {user_input.genre}, {user_input.language}"}
+
+    Args = {
+        "English": [
+            "Hello",
+            {"Man": "Mr.", "Woman": "Ms.", "Homme": "Mr.", "Femme": "Ms."},
+        ],
+        "Français": [
+            "Bonjour",
+            {"Homme": "M.", "Femme": "Mme", "Man": "M.", "Woman": "Mme"},
+        ],
+    }
+
+    return {
+        "message": f"{Args[user_input.language][0]} {Args[user_input.language][1][user_input.genre]} {user_input.name}"
+    }
