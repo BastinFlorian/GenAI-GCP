@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-HOST = "http://localhost:8181/answer"
+HOST = "https://mehyar-chatapi-1021317796643.europe-west1.run.app/answer"
 
 st.title('Dear User!')
 

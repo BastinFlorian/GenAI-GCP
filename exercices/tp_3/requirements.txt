@@ -20,3 +20,4 @@ xxhash
 google-auth
 google-api-python-client
 google-ai-generativelanguage
+langchain_google_genai

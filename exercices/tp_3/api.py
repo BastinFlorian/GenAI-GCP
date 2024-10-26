@@ -11,7 +11,7 @@ load_dotenv()
 
 app = FastAPI()
 
-api_key = os.environ.get('API_KEY')
+api_key = os.environ.get('GOOGLE_API_KEY')
 
 class UserInput(BaseModel):
     question: str
@@ -22,13 +22,20 @@ class UserInput(BaseModel):
 
 @app.post("/answer")
 def answer(user_input: UserInput):
+    '''
+    This fuction ...
 
 
-    gemini_model = ChatGoogleGenerativeAI(api_key=api_key, 
-                                          model="gemini-1.5-pro",
-                                          temperature = user_input.temperature,
-                                              safety_settings={
-        HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+    Args
+
+        '''
+
+    gemini_model = ChatGoogleGenerativeAI(
+        api_key=api_key, 
+        model="gemini-1.5-pro",
+        temperature = user_input.temperature,
+        safety_settings={
+            HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
     },
 )
 
