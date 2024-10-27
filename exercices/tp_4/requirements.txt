@@ -15,4 +15,6 @@ langchain_community
 google-cloud-storage
 unstructured
 langchain
-langchain_unstructured
+langchain-unstructured
+libmagic
+asyncio
