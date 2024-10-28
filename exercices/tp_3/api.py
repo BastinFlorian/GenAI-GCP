@@ -1,9 +1,9 @@
+import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from langchain_google_genai import ChatGoogleGenerativeAI,HarmCategory,HarmBlockThreshold
 from langchain_core.prompts import ChatPromptTemplate
 #from langchain.prompts import PromptTemplate
-import os
 from dotenv import load_dotenv
 
 
@@ -32,7 +32,7 @@ def answer(user_input: UserInput):
 
     gemini_model = ChatGoogleGenerativeAI(
         api_key=api_key, 
-        model="gemini-1.5-pro",
+        model=" ",
         temperature = user_input.temperature,
         safety_settings={
             HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,

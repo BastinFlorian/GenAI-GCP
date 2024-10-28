@@ -13,6 +13,6 @@ langchain-google-cloud-sql-pg
 langchain-google-vertexai
 langchain_community
 google-cloud-storage
-unstructured
+google-cloud-storage>=2.18.0
 langchain
 langchain_unstructured
