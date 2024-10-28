@@ -1,11 +1,17 @@
 import os
-from ingest import create_cloud_sql_database_connection, get_embeddings, get_vector_store
+from ingest import (
+    create_cloud_sql_database_connection,
+    get_embeddings,
+    get_vector_store,
+)
 from langchain_google_cloud_sql_pg import PostgresVectorStore
 from langchain_core.documents.base import Document
 from config import TABLE_NAME
 
 
-def get_relevant_documents(query: str, vector_store: PostgresVectorStore) -> list[Document]:
+def get_relevant_documents(
+    query: str, vector_store: PostgresVectorStore
+) -> list[Document]:
     """
     Retrieve relevant documents based on a query using a vector store.
 
@@ -16,8 +22,9 @@ def get_relevant_documents(query: str, vector_store: PostgresVectorStore) -> lis
     Returns:
         list[Document]: A list of documents relevant to the query.
     """
-    retriever =  # TODO
+    retriever = vector_store.as_retriever()
     return retriever.invoke(query)
+
 
 def format_relevant_documents(documents: list[Document]) -> str:
     """
@@ -45,7 +52,7 @@ def format_relevant_documents(documents: list[Document]) -> str:
     return "\n".join([doc.page_content for doc in documents])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Test get_relevant_documents
     engine = create_cloud_sql_database_connection()
     embedding = get_embeddings()
