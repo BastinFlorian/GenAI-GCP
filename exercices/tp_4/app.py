@@ -4,12 +4,10 @@ import streamlit as st
 import requests
 
 # Définir l'URL de l'API (à ajuster selon l'environnement de déploiement)
-HOST = "http://localhost:8181"  # Local host
-# HOST = "https://fb-api-1021317796643.europe-west1.run.app"  # Cloud Run
+#HOST = "http://localhost:8181"  # Local host
+HOST = "https://mehyar-rag-1021317796643.europe-west1.run.app"  # Cloud Run
+st.title('Welcome to the Generative Ai assisstant')
 
-st.title('Hello, Streamlit!')
-
-# Paramètres dans la barre latérale
 with st.sidebar:
     temperature = st.slider("Temperature", min_value=0.0, max_value=1.0, value=0.2, step=0.05)
     language = st.selectbox('language', ['English', 'Francais', 'Arabic'])
