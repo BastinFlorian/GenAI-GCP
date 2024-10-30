@@ -93,13 +93,18 @@ docker-compose up --build
 # May change depending on your platform
 # Replace <my-docker-image-name> and <my-app-name> with your initials + _api
 # Example: Florian Bastin -> <my-docker-image-name>fb_api
+# Run the following command to configure docker to authenticate with Google Cloud Artifact Registry:
+gcloud auth configure-docker europe-west1-docker.pkg.dev
+
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
+# Investigate on to run docker in your specific machine otherwise with Chat GPT
+# Keep the solution, it will be useful for the next commands
 docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<my-docker-name>:latest -f Dockerfile_api .
 
 # Be careful, the default port is 8080 for Cloud Run.
 # If you encounter an error message, edit the default Cloud Run port on the interface or in the command line
 gcloud run deploy <my-app-name> \
-        --image=<my-region>-docker.pkg.dev/<my-project-id>/<my-registry-name>/<my-docker-image-name>:latest \
+        --image=<my-region>-docker.pkg.dev/<my-project-id>/dauphine-ar/<my-docker-image-name>:latest \
         --platform=managed \
         --region=<my-region> \
         --allow-unauthenticated \
@@ -119,7 +124,7 @@ Example: `HOST = "https://fb-1021317796643.europe-west1.run.app/answer"`
 docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<my-docker-name>:latest -f Dockerfile .
 
 gcloud run deploy <my-app-name> \
-        --image=<my-region>-docker.pkg.dev/<my-project-id>/<my-registry-name>/<my-docker-image-name>:latest \
+        --image=<my-region>-docker.pkg.dev/<my-project-id>/dauphine-ar/<my-docker-image-name>:latest \
         --platform=managed \
         --region=<my-region> \
         --allow-unauthenticated
