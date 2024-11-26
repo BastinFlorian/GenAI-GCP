@@ -78,16 +78,16 @@ Here we just display the relevant documents from a user query. We don't ask the 
 # Replace <my-docker-image-name> and <my-app-name> with your initials + _api
 # Example: Florian Bastin -> <my-docker-image-name>fb_api
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<my-docker-name>:latest -f Dockerfile_api .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-api:latest -f Dockerfile_api .
 
 # Be careful, the default port is 8080 for Cloud Run.
 # If you encounter an error, edit the default Cloud Run port on the interface or via command line
-gcloud run deploy <my-app-name> \
-    --image=<my-region>-docker.pkg.dev/<my-project-id>/<my-registry-name>/<my-docker-name>:latest \
+gcloud run deploy malekmak-api \
+    --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-api:latest \
     --platform=managed \
-    --region=<my-region> \
+    --region=europe-west1 \
     --allow-unauthenticated \
-    --set-env-vars GOOGLE_API_KEY=[INSERT_GOOGLE_API_KEY],DB_PASSWORD=[INSERT_DB_PASSWORD] \
+    --set-env-vars GOOGLE_API_KEY="insert_key",DB_PASSWORD="insert_pw" \
     --port 8181
 
 # Note that a SECRET KEY like this should be provided by GOOGLE SECRET MANAGER for more safety.
@@ -95,7 +95,7 @@ gcloud run deploy <my-app-name> \
 ```
 
 - Change the HOST in your Streamlit `app.py` to the URL of the FastAPI:
-Example: `HOST = "https://fb-1021317796643.europe-west1.run.app/answer"`
+Example: `HOST = "https://malekmak-api-1021317796643.europe-west1.run.app/answer"`
 
 - Deploy the Streamlit app:
 ```bash
@@ -103,10 +103,10 @@ Example: `HOST = "https://fb-1021317796643.europe-west1.run.app/answer"`
 # Replace <my-docker-image-name> and <my-app-name> with your initials + _streamlit
 # Example: Florian Bastin -> <my-docker-image-name>fb_streamlit
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<my-docker-name>:latest -f Dockerfile .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-streamlit:latest -f Dockerfile .
 
-gcloud run deploy <initials>-streamlit \
-    --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<initials>-streamlit:latest \
+gcloud run deploy malekmak-streamlit \
+    --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-streamlit:latest \
     --platform=managed \
     --region=europe-west1 \
     --allow-unauthenticated \

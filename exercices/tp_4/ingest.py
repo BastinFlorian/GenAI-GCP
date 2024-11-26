@@ -19,7 +19,7 @@ load_dotenv()
 # Sensitive information goes in .env
 DB_PASSWORD = os.environ["DB_PASSWORD"]
 
-DOWNLOADED_LOCAL_FIRECTORY = "./downloaded_files"
+DOWNLOADED_LOCAL_DIRECTORY = "./downloaded_files"
 
 
 def list_files_in_bucket(
@@ -227,15 +227,15 @@ async def main():
         # Test download_file_from_bucket
         file_path = "data/1 - Gen AI - Dauphine Tunis.pptx"
         local_filepath = download_file_from_bucket(
-            bucket, file_path, DOWNLOADED_LOCAL_FIRECTORY
+            bucket, file_path, DOWNLOADED_LOCAL_DIRECTORY
         )
         assert os.path.exists(
-            os.path.join(DOWNLOADED_LOCAL_FIRECTORY, os.path.basename(file_path))
+            os.path.join(DOWNLOADED_LOCAL_DIRECTORY, os.path.basename(file_path))
         ), "File not downloaded successfully"
 
         # Test read_file_from_local
         documents = read_file_from_local(
-            os.path.join(DOWNLOADED_LOCAL_FIRECTORY, os.path.basename(local_filepath))
+            os.path.join(DOWNLOADED_LOCAL_DIRECTORY, os.path.basename(local_filepath))
         )
         assert len(documents) > 0, "No documents loaded from the file"
 
