@@ -22,7 +22,9 @@ def get_relevant_documents(
     Returns:
         list[Document]: A list of documents relevant to the query.
     """
-    retriever = vector_store.as_retriever()
+    retriever = vector_store.as_retriever(
+        search_type="similarity_score_threshold", search_kwargs={"score_threshold": 0.6}
+    )
     return retriever.invoke(query)
 
 

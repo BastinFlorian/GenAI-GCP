@@ -7,7 +7,7 @@ import requests
 
 # HOST = "http://0.0.0.0:8181/answer"  # Docker run name of Fast API
 # HOST = "http://0.0.0.0:8181"
-HOST = "https://malekmak-api-1021317796643.europe-west1.run.app/answer"  # Cloud Run
+HOST = "https://malekmak-api-1021317796643.europe-west1.run.app"  # Cloud Run
 
 st.title("Hello, Streamlit!")
 
@@ -42,14 +42,22 @@ if question := st.chat_input("What is your question ?"):
     st.chat_message("user", avatar="🧑‍💻").write(question)
 
     response = requests.post(
-        os.path.join(HOST, "answer"),
-        json={"question": question, "temperature": temperature, "language": language},
+        f"{HOST}/answer",
+        json={
+            "question": question,
+            "temperature": temperature,
+            "language": language,
+        },
         timeout=30,
     )
 
     documents = requests.post(
-        os.path.join(HOST, "get_sources"),
-        json={"question": question, "temperature": temperature, "language": language},
+        f"{HOST}/get_sources",
+        json={
+            "question": question,
+            "temperature": temperature,
+            "language": language,
+        },
         timeout=30,
     )
 
@@ -61,7 +69,7 @@ if question := st.chat_input("What is your question ?"):
         st.chat_message("assistant", avatar="🤖").write(answer)
     else:
         st.write("Error: Unable to get a response from the API (response)")
-        st.write(f"The error is: {response.text}")
+        st.write(f"The error is: {response.text}\nStatus Code: {response.status_code}")
 
     if documents.status_code == 200:
         sources: List[Dict[str, str]] = documents.json()
@@ -76,4 +84,6 @@ if question := st.chat_input("What is your question ?"):
                 st.write(source["page_content"])
     else:
         st.write("Error: Unable to get a response from the API (documents)")
-        st.write(f"The error is: {documents.text}")
+        st.write(
+            f"The error is: {documents.text}\nStatus Code: {documents.status_code}"
+        )

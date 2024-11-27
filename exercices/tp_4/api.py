@@ -1,6 +1,5 @@
 """API"""
 
-import os
 from typing import List
 from langchain_google_vertexai import VertexAIEmbeddings
 from fastapi import FastAPI
@@ -9,7 +8,6 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 import os
 from dotenv import load_dotenv
-from langchain_google_cloud_sql_pg import PostgresEngine
 from langchain_google_cloud_sql_pg import PostgresEngine
 
 from ingest import (
@@ -53,6 +51,7 @@ class DocumentResponse(BaseModel):
 def get_sources(user_input: UserInput) -> List[DocumentResponse]:
     vector_store = get_vector_store(ENGINE, TABLE_NAME, EMBEDDING)
     relevants_docs = get_relevant_documents(user_input.question, vector_store)
+    # return format_relevant_documents(relevants_docs)
     return [
         {"page_content": doc.page_content, "metadata": doc.metadata}
         for doc in relevants_docs
