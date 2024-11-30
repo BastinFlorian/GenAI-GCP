@@ -78,12 +78,12 @@ Here we just display the relevant documents from a user query. We don't ask the 
 # Replace <my-docker-image-name> and <my-app-name> with your initials + _api
 # Example: Florian Bastin -> <my-docker-image-name>fb_api
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-api:latest -f Dockerfile_api .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/name-api:latest -f Dockerfile_api .
 
 # Be careful, the default port is 8080 for Cloud Run.
 # If you encounter an error, edit the default Cloud Run port on the interface or via command line
 gcloud run deploy malekmak-api \
-    --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-api:latest \
+    --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/name-api:latest \
     --platform=managed \
     --region=europe-west1 \
     --allow-unauthenticated \
@@ -95,7 +95,7 @@ gcloud run deploy malekmak-api \
 ```
 
 - Change the HOST in your Streamlit `app.py` to the URL of the FastAPI:
-Example: `HOST = "https://malekmak-api-1021317796643.europe-west1.run.app/answer"`
+Example: `HOST = "https://name-api-1021317796643.europe-west1.run.app"`
 
 - Deploy the Streamlit app:
 ```bash
@@ -103,10 +103,10 @@ Example: `HOST = "https://malekmak-api-1021317796643.europe-west1.run.app/answer
 # Replace <my-docker-image-name> and <my-app-name> with your initials + _streamlit
 # Example: Florian Bastin -> <my-docker-image-name>fb_streamlit
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-streamlit:latest -f Dockerfile .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/name-streamlit:latest -f Dockerfile .
 
-gcloud run deploy malekmak-streamlit \
-    --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/malekmak-streamlit:latest \
+gcloud run deploy name-streamlit \
+    --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/name-streamlit:latest \
     --platform=managed \
     --region=europe-west1 \
     --allow-unauthenticated \
