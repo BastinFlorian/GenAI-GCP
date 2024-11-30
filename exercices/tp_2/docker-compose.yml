@@ -1,5 +1,5 @@
 version: '3.8'
-
+  
 services:
   fastapi:
     build:
@@ -9,7 +9,7 @@ services:
     networks:
       - my_network
     ports:
-      - "8080:8080" # TODO EDIT ACCORDINGLY
+      - "8181:8181"  # Adjust if necessary
 
   streamlit:
     build:
@@ -19,7 +19,7 @@ services:
     networks:
       - my_network
     ports:
-      - "8501:8501" # TODO EDIT ACCORDINGLY
+      - "8501:8501"  # Adjust if necessary
 
 networks:
   my_network:
