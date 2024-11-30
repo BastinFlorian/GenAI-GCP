@@ -1,0 +1,9 @@
+# Streamlit
+streamlit
+
+# API
+fastapi
+pydantic
+uvicorn
+pydantic
+requests
