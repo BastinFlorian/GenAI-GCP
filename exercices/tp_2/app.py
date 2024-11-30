@@ -1,21 +1,18 @@
-"""Streamlit app"""
-import streamlit as st
-import requests
+# api.py
 
-# TODO
-# HOST = "http://[container_name]:[host]/answer"
+from fastapi import FastAPI
+from pydantic import BaseModel
+app = FastAPI()
 
-st.title('Hello, Streamlit!')
-message = st.text_input('Say something')
-if message:
-    # TODO
-    response = requests.post(
-        HOST,
-        ...
-        json=...,
-        timeout=20
-    )
-    if response.status_code == 200:
-        st.write(response.json()["message"])
-    else:
-        st.write("Error: Unable to get a response from the API")
+
+class UserInput(BaseModel):
+    name: str
+    genre: str
+    language: str
+
+
+@app.post("/answer")
+def answer(user_input: UserInput):
+    greeting = f"Bonjour {'monsieur' if user_input.genre.lower() == 'male' else 'madame'} {user_input.name}"
+    return {"message": greeting}
+
