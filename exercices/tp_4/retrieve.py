@@ -1,4 +1,3 @@
-import os
 from ingest import (
     create_cloud_sql_database_connection,
     get_embeddings,
@@ -22,10 +21,31 @@ def get_relevant_documents(
     Returns:
         list[Document]: A list of documents relevant to the query.
     """
+
+    # thresholds_k = [(0.65, 4)]
+    # for threshold, k in thresholds_k:
+    #     retriever = vector_store.as_retriever(
+    #         search_type="similarity_score_threshold",
+    #         search_kwargs={"score_threshold": threshold, "k": k},
+    #     )
+    #     relevant_docs = retriever.invoke(query)
+
+    #     if relevant_docs:
+    #         return relevant_docs
+    # relevant_docs = []
+
+    # retriever = vector_store.as_retriever(
+    #     search_type="mmr",
+    #     search_kwargs={"k": 4},
+    # )
+    # relevant_docs = retriever.invoke(query)
+
     retriever = vector_store.as_retriever(
-        search_type="similarity_score_threshold", search_kwargs={"score_threshold": 0.6}
+        search_kwargs={"k": 4},
     )
-    return retriever.invoke(query)
+    relevant_docs = retriever.invoke(query)
+
+    return relevant_docs
 
 
 def format_relevant_documents(documents: list[Document]) -> str:
@@ -51,7 +71,9 @@ def format_relevant_documents(documents: list[Document]) -> str:
         '''
     """
     # TOUPDATE with example in docstring
-    return "\n".join([doc.page_content for doc in documents])
+    return "\n".join(
+        [f"Source {i+1}: {doc.page_content}\n-----" for i, doc in enumerate(documents)]
+    )
 
 
 if __name__ == "__main__":
@@ -59,7 +81,7 @@ if __name__ == "__main__":
     engine = create_cloud_sql_database_connection()
     embedding = get_embeddings()
     vector_store = get_vector_store(engine, TABLE_NAME, embedding)
-    documents = get_relevant_documents("large language modelss", vector_store)
+    documents = get_relevant_documents("large language models", vector_store)
     assert len(documents) > 0, "No documents found for the query"
 
     # Test format_relevant_documents

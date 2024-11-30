@@ -104,18 +104,26 @@ def merge_documents_by_page(documents: list[Document]) -> list[Document]:
     merged_documents: list[Document] = []
     page_dict = {}
 
+    # Group documents by page number
     for doc in documents:
+        document_source = doc.metadata.get("source")
         page_number = doc.metadata.get("page_number")
-        if page_number is not None:
-            if page_number not in page_dict:
-                page_dict[page_number] = [doc]
-            else:
-                page_dict[page_number].append(doc)
 
-    for page_number, docs in page_dict.items():
+        if page_number is not None and document_source is not None:
+            key = (document_source, page_number)
+            if key not in page_dict:
+                page_dict[key] = [doc]
+            else:
+                page_dict[key].append(doc)
+
+    # Merge documents for each source/page
+    for (document_source, page_number), docs in page_dict.items():
         if docs:
+            # Use the metadata of the first document in the group
             merged_metadata = docs[0].metadata
+            # Concatenate the page content of all documents in the group
             merged_content = "\n".join(doc.page_content for doc in docs)
+            # Create a new Document with merged content and metadata
             merged_documents.append(
                 Document(metadata=merged_metadata, page_content=merged_content)
             )
@@ -222,6 +230,7 @@ async def main():
         print(BUCKET_NAME)
         bucket = client.get_bucket(BUCKET_NAME)
         files = list_files_in_bucket(client, bucket)
+        print(len(files))
         assert len(files) > 0, "No files found in the bucket"
 
         # Test download_file_from_bucket

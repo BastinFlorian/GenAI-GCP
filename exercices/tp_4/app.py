@@ -1,13 +1,12 @@
 """Streamlit app"""
 
-import os
 from typing import Dict, List
 import streamlit as st
 import requests
 
 # HOST = "http://0.0.0.0:8181/answer"  # Docker run name of Fast API
-# HOST = "http://0.0.0.0:8181"
-HOST = "https://malekmak-api-1021317796643.europe-west1.run.app"  # Cloud Run
+HOST = "http://0.0.0.0:8181"
+# HOST = "https://malekmak-api-1021317796643.europe-west1.run.app"  # Cloud Run
 
 st.title("Hello, Streamlit!")
 
@@ -41,22 +40,31 @@ if question := st.chat_input("What is your question ?"):
     st.session_state.messages.append({"role": "user", "content": question})
     st.chat_message("user", avatar="🧑‍💻").write(question)
 
-    response = requests.post(
-        f"{HOST}/answer",
-        json={
-            "question": question,
-            "temperature": temperature,
-            "language": language,
-        },
-        timeout=30,
-    )
-
     documents = requests.post(
         f"{HOST}/get_sources",
         json={
             "question": question,
             "temperature": temperature,
             "language": language,
+            "documents": [],
+            "previous_context": [],
+        },
+        timeout=30,
+    )
+
+    docs = documents.json()
+
+    if not isinstance(docs, list):
+        docs = []
+
+    response = requests.post(
+        f"{HOST}/answer",
+        json={
+            "question": question,
+            "temperature": temperature,
+            "language": language,
+            "documents": docs,
+            "previous_context": st.session_state["messages"],
         },
         timeout=30,
     )

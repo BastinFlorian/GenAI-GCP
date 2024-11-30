@@ -174,3 +174,10 @@ credentials.json
 .terraform.lock.hcl
 terraform.tfstate.backup
 terraform.tfstate
+
+
+
+
+
+# Personnal Commands
+.commands
