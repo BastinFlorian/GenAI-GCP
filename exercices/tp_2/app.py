@@ -1,18 +1,21 @@
-# api.py
+import streamlit as st
+import requests
 
-from fastapi import FastAPI
-from pydantic import BaseModel
-app = FastAPI()
+HOST = "http://localhost:8181/answer"
+#HOST = "https://fb-1021317796643.europe-west1.run.app/answer"
+st.title('Hello, Streamlit!')
 
+name = st.text_input('Enter your name')
+genre = st.selectbox('Select your gender', ('male', 'female'))
+language = st.selectbox('Select your language', ('English', 'French'))
 
-class UserInput(BaseModel):
-    name: str
-    genre: str
-    language: str
-
-
-@app.post("/answer")
-def answer(user_input: UserInput):
-    greeting = f"Bonjour {'monsieur' if user_input.genre.lower() == 'male' else 'madame'} {user_input.name}"
-    return {"message": greeting}
-
+if st.button("Submit"):
+    response = requests.post(
+        HOST,
+        json={'name': name, 'genre': genre, 'language': language},
+        timeout=20
+    )
+    if response.status_code == 200:
+        st.write(response.json()["message"])
+    else:
+        st.write("Error: Unable to get a response from the API")
