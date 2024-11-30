@@ -82,7 +82,7 @@ docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev
 
 # Be careful, the default port is 8080 for Cloud Run.
 # If you encounter an error, edit the default Cloud Run port on the interface or via command line
-gcloud run deploy malekmak-api \
+gcloud run deploy name-api \
     --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/name-api:latest \
     --platform=managed \
     --region=europe-west1 \
