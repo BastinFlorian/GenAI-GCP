@@ -9,7 +9,7 @@ from config import TABLE_NAME
 
 
 def get_relevant_documents(
-    query: str, vector_store: PostgresVectorStore
+    query: str, vector_store: PostgresVectorStore, similarity_threshold: float
 ) -> list[Document]:
     """
     Retrieve relevant documents based on a query using a vector store.
@@ -22,17 +22,22 @@ def get_relevant_documents(
         list[Document]: A list of documents relevant to the query.
     """
 
+    relevant_docs_scores = vector_store.similarity_search_with_relevance_scores(
+        query=query, k=4
+    )
+    for doc, score in relevant_docs_scores:
+        doc.metadata["score"] = score
+    relevant_docs = [doc for doc, _ in relevant_docs_scores]
+    return relevant_docs
+
     # thresholds_k = [(0.65, 4)]
     # for threshold, k in thresholds_k:
-    #     retriever = vector_store.as_retriever(
-    #         search_type="similarity_score_threshold",
-    #         search_kwargs={"score_threshold": threshold, "k": k},
-    #     )
-    #     relevant_docs = retriever.invoke(query)
 
-    #     if relevant_docs:
-    #         return relevant_docs
-    # relevant_docs = []
+    # retriever = vector_store.as_retriever(
+    #     search_type="similarity_score_threshold",
+    #     search_kwargs={"score_threshold": similarity_threshold, "k": 4},
+    # )
+    # relevant_docs = retriever.invoke(query)
 
     # retriever = vector_store.as_retriever(
     #     search_type="mmr",
@@ -40,10 +45,10 @@ def get_relevant_documents(
     # )
     # relevant_docs = retriever.invoke(query)
 
-    retriever = vector_store.as_retriever(
-        search_kwargs={"k": 4},
-    )
-    relevant_docs = retriever.invoke(query)
+    # retriever = vector_store.as_retriever(
+    #     search_kwargs={"k": 4},
+    # )
+    # relevant_docs = retriever.invoke(query)
 
     return relevant_docs
 

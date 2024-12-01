@@ -42,6 +42,7 @@ class UserInput(BaseModel):
     question: str
     temperature: float
     language: str
+    similarity_threshold: float
     documents: List[DocumentResponse]
     previous_context: List[dict]
 
@@ -50,7 +51,7 @@ class UserInput(BaseModel):
 def get_sources(user_input: UserInput) -> List[DocumentResponse]:
     vector_store = get_vector_store(ENGINE, TABLE_NAME, EMBEDDING)
     relevants_docs = get_relevant_documents(
-        f"Retrieve information related to: {user_input.question}", vector_store
+        f"Retrieve information related to: {user_input.question}", vector_store, user_input.similarity_threshold
     )
 
     if not relevants_docs:
@@ -98,8 +99,8 @@ def answer(user_input: UserInput):
                 1. Answer in {language} the QUESTION using the provided DOCUMENT text above.
                 2. Keep your answer grounded in the facts from the DOCUMENT whenever possible.
                 3. If the DOCUMENT does not contain enough information to fully answer the QUESTION, respond using your own knowledge. 
-                4. In your response, clearly indicate when the answer is based on your own knowledge and when it is based on the DOCUMENT.
-                5. Be concise but retain all relevant information, distinguishing between the sources of the answer.
+                4. When your answer is based on your own knowledge, clearly indicate it in your response.
+                5. Be somewhat concise but retain all relevant information and details.
                 6. If the question refers to "it" or any other ambiguous term, refer to the LAST DISCUSSED ENTITY unless further clarification is provided in the QUESTION.
                 7. Use the PREVIOUS CONTEXT only if it provides additional clarity or information that directly supports answering the QUESTION.
 
