@@ -51,7 +51,9 @@ class UserInput(BaseModel):
 def get_sources(user_input: UserInput) -> List[DocumentResponse]:
     vector_store = get_vector_store(ENGINE, TABLE_NAME, EMBEDDING)
     relevants_docs = get_relevant_documents(
-        f"Retrieve information related to: {user_input.question}", vector_store, user_input.similarity_threshold
+        f"Retrieve information related to: {user_input.question}",
+        vector_store,
+        user_input.similarity_threshold,
     )
 
     if not relevants_docs:

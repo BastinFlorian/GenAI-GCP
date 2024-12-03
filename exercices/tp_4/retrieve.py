@@ -28,7 +28,6 @@ def get_relevant_documents(
     for doc, score in relevant_docs_scores:
         doc.metadata["score"] = score
     relevant_docs = [doc for doc, _ in relevant_docs_scores]
-    return relevant_docs
 
     # thresholds_k = [(0.65, 4)]
     # for threshold, k in thresholds_k:

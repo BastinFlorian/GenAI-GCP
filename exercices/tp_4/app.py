@@ -4,21 +4,46 @@ from typing import Dict, List
 import streamlit as st
 import requests
 
+
+from google.cloud import storage
+from config import BUCKET_NAME
+from ingest import list_files_in_bucket
+
 # HOST = "http://0.0.0.0:8181/answer"  # Docker run name of Fast API
 HOST = "http://0.0.0.0:8181"
 # HOST = "https://malekmak-api-1021317796643.europe-west1.run.app"  # Cloud Run
 
-st.title("Malek Makhlouf's RAG Streamlit Chatbot")
+client = storage.Client()
+
+
+st.title("Malek's RAG Chatbot")
 
 
 with st.sidebar:
+    st.header("Settings")
     temperature = st.slider(
         "Temperature", min_value=0.0, max_value=1.0, value=0.2, step=0.05
     )
     similarity_threshold = st.slider(
-        "RAG Similarity Threshold", min_value=0.0, max_value=1.0, value=0.65, step=0.05, disabled=True
+        "RAG Similarity Threshold",
+        min_value=0.0,
+        max_value=1.0,
+        value=0.65,
+        step=0.05,
+        disabled=True,
     )
     language = st.selectbox("language", ["English", "Francais", "Arabic"])
+
+    st.subheader(f"Ingested Files ({BUCKET_NAME})")
+    try:
+        bucket = client.get_bucket(BUCKET_NAME)
+        files = list_files_in_bucket(client, bucket)
+        for i, file in enumerate(files):
+            if i != 0:
+                st.write(file[5:])
+    except Exception as e:
+        st.error(f"Failed to fetch files: {e}")
+
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
@@ -33,12 +58,15 @@ for n, message in enumerate(st.session_state.messages):
     # Show sources if the message has them
     if "sources" in message and message["sources"]:
         for i, source in enumerate(message["sources"]):
-            if source['metadata']['score'] >= similarity_threshold:
-                with st.expander(f"Source {i+1}    -    relevance: {(source['metadata']['score'])*100:.2f}%"):
+            if source["metadata"]["score"] >= similarity_threshold:
+                with st.expander(
+                    f"Source {i+1}    -    relevance: {(source['metadata']['score'])*100:.2f}%"
+                ):
                     st.write("Metadata:")
                     st.write(source["metadata"])
                     st.write("Content:")
                     st.write(source["page_content"])
+
 
 if question := st.chat_input("Message Malek's Chatbot"):
     st.session_state.messages.append({"role": "user", "content": question})
@@ -91,8 +119,10 @@ if question := st.chat_input("Message Malek's Chatbot"):
             "sources"
         ] = sources  # Attach sources to last answer
         for i, source in enumerate(sources):
-            if source['metadata']['score'] >= similarity_threshold:
-                with st.expander(f"Source {i+1}    -    relevance: {(source['metadata']['score'])*100:.2f}%"):
+            if source["metadata"]["score"] >= similarity_threshold:
+                with st.expander(
+                    f"Source {i+1}    -    relevance: {(source['metadata']['score'])*100:.2f}%"
+                ):
                     st.write("Metadata:")
                     st.write(source["metadata"])
                     st.write("Content:")
