@@ -5,18 +5,21 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
+from google.cloud import storage
 from dotenv import load_dotenv
 from ingest import (
     create_cloud_sql_database_connection,
     get_embeddings,
     get_vector_store,
+    list_files_in_bucket,
 )
 from retrieve import get_relevant_documents, format_relevant_documents
-from config import TABLE_NAME
+from config import TABLE_NAME, BUCKET_NAME
 
 load_dotenv()
 
 app = FastAPI()
+client = storage.Client()
 
 # Initialize once and reuse
 ENGINE = create_cloud_sql_database_connection()
@@ -45,6 +48,13 @@ class UserInput(BaseModel):
     similarity_threshold: float
     documents: List[DocumentResponse]
     previous_context: List[dict]
+
+
+@app.post("/get_files_names")
+def get_files_names():
+    bucket = client.get_bucket(BUCKET_NAME)
+    files = list_files_in_bucket(client, bucket)
+    return {"files": files}
 
 
 @app.post("/get_sources", response_model=List[DocumentResponse])

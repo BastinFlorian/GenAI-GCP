@@ -4,19 +4,29 @@ from typing import Dict, List
 import streamlit as st
 import requests
 
-
-from google.cloud import storage
-from config import BUCKET_NAME
-from ingest import list_files_in_bucket
-
 # HOST = "http://0.0.0.0:8181/answer"  # Docker run name of Fast API
-HOST = "http://0.0.0.0:8181"
-# HOST = "https://malekmak-api-1021317796643.europe-west1.run.app"  # Cloud Run
-
-client = storage.Client()
+# HOST = "http://0.0.0.0:8181"
+HOST = "https://malekmak-api-1021317796643.europe-west1.run.app"  # Cloud Run
 
 
 st.title("Malek's RAG Chatbot")
+
+
+if "files_fetched" not in st.session_state:
+    st.session_state.files_fetched = False
+    st.session_state.files = []
+
+if not st.session_state.files_fetched:
+    try:
+        response = requests.post(f"{HOST}/get_files_names", timeout=30)
+        files = response.json().get("files", [])
+        if files:
+            st.session_state.files = files
+            st.session_state.files_fetched = True
+        else:
+            st.info("No files found in the bucket.")
+    except requests.exceptions.RequestException as e:
+        st.error(f"Failed to fetch files: {e}")
 
 
 with st.sidebar:
@@ -34,15 +44,9 @@ with st.sidebar:
     )
     language = st.selectbox("language", ["English", "Francais", "Arabic"])
 
-    st.subheader(f"Ingested Files ({BUCKET_NAME})")
-    try:
-        bucket = client.get_bucket(BUCKET_NAME)
-        files = list_files_in_bucket(client, bucket)
-        for i, file in enumerate(files):
-            if i != 0:
-                st.write(file[5:])
-    except Exception as e:
-        st.error(f"Failed to fetch files: {e}")
+    st.subheader(f"Ingested Files")
+    for file in st.session_state.files[1:]:
+        st.write(file[5:])
 
 
 if "messages" not in st.session_state:
