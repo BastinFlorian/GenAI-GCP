@@ -92,12 +92,12 @@ def answer(user_input: UserInput):
                 {last_entity}
 
                 INSTRUCTIONS:  
-                    1. Respond in **{language}** to the **QUESTION**, using the information from the **DOCUMENT** provided.  
-                    2. Ensure your response is directly grounded in the **DOCUMENT** whenever possible.  
-                    3. If the **DOCUMENT** lacks sufficient information, use your general knowledge to answer, but clearly indicate when doing so.  
+                    1. Respond in {language} to the {question}, using the information from the {document} provided.  
+                    2. Ensure your response is directly grounded in the {document} whenever possible.  
+                    3. If the {document} lacks sufficient information, use your general knowledge to answer, but clearly indicate when doing so.  
                     4. Keep your answer concise yet complete, including all relevant details and facts.  
-                    5. Resolve ambiguous terms (e.g., "it") by referencing the **LAST DISCUSSED ENTITY** unless the **QUESTION** specifies otherwise.  
-                    6. Refer to the **PREVIOUS CONTEXT** only if it directly clarifies or supplements the **QUESTION** or **DOCUMENT**.  
+                    5. Resolve ambiguous terms (e.g., "it") by referencing the {last_entity} unless the {question} specifies otherwise.  
+                    6. Refer to the {previous_context} only if it directly clarifies or supplements the {question} or {document}.  
 
                 QUESTION:
                 {question}
