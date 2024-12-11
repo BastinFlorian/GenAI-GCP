@@ -1,18 +1,18 @@
-"""Streamlit app"""
+# Streamlit app
 import streamlit as st
 import requests
 
-# TODO
-# HOST = "http://[container_name]:[host]/answer"
-
+HOST = "http://localhost:8181/answer"
+#HOST = "https://fb-1021317796643.europe-west1.run.app/answer"
 st.title('Hello, Streamlit!')
-message = st.text_input('Say something')
-if message:
-    # TODO
+name = st.text_input('Enter your name')
+genre = st.selectbox('Select your gender', ('male', 'female'))
+language = st.selectbox('Select your language', ('English', 'French'))
+
+if st.button("Submit"):
     response = requests.post(
         HOST,
-        ...
-        json=...,
+        json={'name': name, 'genre': genre, 'language': language},
         timeout=20
     )
     if response.status_code == 200:

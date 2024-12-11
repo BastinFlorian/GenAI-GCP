@@ -78,7 +78,7 @@ Here we just display the relevant documents from a user query. We don't ask the 
 # Replace <my-docker-image-name> and <my-app-name> with your initials + _api
 # Example: Florian Bastin -> <my-docker-image-name>fb_api
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<my-docker-name>:latest -f Dockerfile_api .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/hibkab4_api:latest -f Dockerfile_api .
 
 # Be careful, the default port is 8080 for Cloud Run.
 # If you encounter an error, edit the default Cloud Run port on the interface or via command line
@@ -89,6 +89,8 @@ gcloud run deploy <my-app-name> \
     --allow-unauthenticated \
     --set-env-vars GOOGLE_API_KEY=[INSERT_GOOGLE_API_KEY],DB_PASSWORD=[INSERT_DB_PASSWORD] \
     --port 8181
+
+
 
 # Note that a SECRET KEY like this should be provided by GOOGLE SECRET MANAGER for more safety.
 # For simplicity, we will use the env variable here.
@@ -103,7 +105,7 @@ Example: `HOST = "https://fb-1021317796643.europe-west1.run.app/answer"`
 # Replace <my-docker-image-name> and <my-app-name> with your initials + _streamlit
 # Example: Florian Bastin -> <my-docker-image-name>fb_streamlit
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<my-docker-name>:latest -f Dockerfile .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/hibkab4-streamlit:latest -f Dockerfile .
 
 gcloud run deploy <initials>-streamlit \
     --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<initials>-streamlit:latest \

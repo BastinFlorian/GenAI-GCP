@@ -53,7 +53,8 @@ Goal:
 # Replace <my-docker-image-name> and <my-app-name> with your initials + _api
 # Florian Bastin -> <my-docker-image-name>fb_api
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<my-docker-name>:latest -f Dockerfile_api .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/hibk_api:latest -f Dockerfile_api .
+
 
 # Be careful, the default port is 8080 for Cloud Run.
 # If you have an error message, edit the default Cloud Run port on the interface or in the command line
@@ -62,7 +63,7 @@ gcloud run deploy <my-app-name> \
     --platform=managed \
     --region=<my-region> \
     --allow-unauthenticated \
-    --set-env-vars GOOGLE_API_KEY=[INSERT_GOOGLE_API_KEY] \
+    --set-env-vars GOOGLE_API_KEY=[GOOGLE_API_KEY] \
     --port 8181
 
 # Note that a SECRET KEY like this should be provided by GOOGLE SECRET MANAGER for more safety.
@@ -85,7 +86,7 @@ gcloud run deploy <initials>-streamlit \
     --platform=managed \
     --region=europe-west1 \
     --allow-unauthenticated \
-    --port 8080
+    --port 8080 
 ```
 Goal:
 

@@ -1,5 +1,4 @@
 import os
-
 PROJECT_ID = "dauphine-437611"
 REGION = "europe-west1"
 
@@ -11,4 +10,4 @@ DB_USER = "students"
 
 # Cloud Storage
 BUCKET_NAME = "dauphine-bucket"
-TABLE_NAME = "fb_table"
+TABLE_NAME = "hibk_table"
