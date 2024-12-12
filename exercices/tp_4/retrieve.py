@@ -1,60 +1,128 @@
+"""
+This module provides functions to load a FAISS vector store,
+retrieve documents, and format search results for display.
+"""
 import os
-from ingest import create_cloud_sql_database_connection, get_embeddings, get_vector_store
-from langchain_google_cloud_sql_pg import PostgresVectorStore
+from typing import List
+
+from langchain_community.vectorstores import FAISS
+from langchain_google_vertexai import VertexAIEmbeddings
 from langchain_core.documents.base import Document
-from config import TABLE_NAME
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Get environment variables
+PROJECT_ID = os.getenv("PROJECT_ID")
+REGION = os.getenv("REGION")
 
 
-def get_relevant_documents(query: str, vector_store: PostgresVectorStore) -> list[Document]:
+def load_vector_store() -> FAISS:
+    """
+    Load the FAISS vector store from disk.
+
+    Returns:
+        FAISS: The loaded vector store.
+    """
+    embeddings = VertexAIEmbeddings(
+        project=PROJECT_ID,
+        location=REGION,
+        model_name="textembedding-gecko-multilingual@latest"
+    )
+
+    # Load the FAISS index from the local file
+    inner_vector_store = FAISS.load_local(
+        "faiss_index",
+        embeddings,
+        allow_dangerous_deserialization=True
+    )
+
+    return inner_vector_store
+
+
+def get_relevant_documents(
+    search_query: str,
+    inner_vector_store: FAISS,
+    num_results: int = 4
+) -> List[Document]:
     """
     Retrieve relevant documents based on a query using a vector store.
 
     Args:
-        query (str): The search query string.
-        vector_store (PostgresVectorStore): An instance of PostgresVectorStore used to retrieve documents.
+        search_query (str): The search query string.
+        inner_vector_store (FAISS): The FAISS vector store to search in.
+        num_results (int, optional): Number of documents to retrieve.
+            Defaults to 4.
 
     Returns:
-        list[Document]: A list of documents relevant to the query.
+        List[Document]: A list of documents relevant to the query.
     """
-    retriever =  # TODO
-    return retriever.invoke(query)
+    documents = inner_vector_store.similarity_search(
+        search_query, k=num_results
+    )
 
-def format_relevant_documents(documents: list[Document]) -> str:
+    # Check and ensure metadata is present for each document
+    for doc in documents:
+        if not doc.metadata:
+            doc.metadata = {"source": "Unknown"}
+
+    return documents
+
+
+def format_relevant_documents(documents: List[Document]) -> str:
     """
-    Format relevant documents into a str.
+    Format relevant documents into a readable string.
 
     Args:
-        documents (list[Document]): A list of relevant documents.
+        documents (List[Document]): A list of relevant documents.
 
     Returns:
-        list[dict]: A list of dictionaries containing the relevant documents.
-
-    Example:
-        >>> documents = [
-            Document(page_content: "First doc", metadata: {"title": "Doc 1"}),
-            Document(page_content: "Second doc", metadata: {"title": "Doc 1"}
-        ]s
-        >>> doc_str: str = format_relevant_documents(documents)
-        >>> '''
-            Source 1: First doc
-            -----
-            Source 2: Second doc
-        '''
+        str: A formatted string containing all relevant documents.
     """
-    # TOUPDATE with example in docstring
-    return "\n".join([doc.page_content for doc in documents])
+    formatted_docs = []
+    for i, doc in enumerate(documents, 1):
+        content = doc.page_content.strip()
+        content = content.replace("\n\n", "\n")
+        formatted_docs.append(
+            f"\n[Source {i}]\n"
+            f"Metadata: {doc.metadata}\n"
+            f"Content:\n{content}"
+        )
+
+    return "\n\n" + "=" * 50 + "\n".join(formatted_docs)
 
 
 if __name__ == '__main__':
-    # Test get_relevant_documents
-    engine = create_cloud_sql_database_connection()
-    embedding = get_embeddings()
-    vector_store = get_vector_store(engine, TABLE_NAME, embedding)
-    documents = get_relevant_documents("large language modelss", vector_store)
-    assert len(documents) > 0, "No documents found for the query"
+    # Load the vector store
+    print("Loading vector store...")
+    vector_store = load_vector_store()
+    print("Vector store loaded successfully!")
 
-    # Test format_relevant_documents
-    doc_str: str = format_relevant_documents(documents)
-    assert len(doc_str) > 0, "No documents formatted successfully"
+    while True:
+        # Get query from user
+        query = input("\nEnter your question (or 'quit' to exit): ")
+        if query.lower() in ['quit', 'exit', 'q']:
+            break
 
-    print("All tests passed successfully.")
+        # Get number of results
+        try:
+            k = int(input(
+                "How many results do you want? (default: 4): "
+            ) or "4")
+        except ValueError:
+            k = 4
+
+        # Get relevant documents
+        print("\nSearching...")
+        relevant_docs = get_relevant_documents(
+            query, vector_store, num_results=k
+        )
+
+        # Format and print results
+        print(f"\nResults for: '{query}'")
+        print(format_relevant_documents(relevant_docs))
+        print("\nIgnore gRPC shutdown warnings")
+        print("- they don't affect functionality.")
+
+    print("\nThank you for using the document search! Goodbye!")
