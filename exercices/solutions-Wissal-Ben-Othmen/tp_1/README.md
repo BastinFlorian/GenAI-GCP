@@ -15,7 +15,7 @@ J'ai utilisé deux outils de linting principaux pour assurer la qualité du code
 - **Flake8** : Vérification du code selon le guide de style PEP 8
 
 ### Capture d'Écran de Vérification
-![Vérification de Qualité Pylint et Flake8](Tp1_pylint_flake8.png)
+![Vérification de Qualité Pylint et Flake8](..\Tp1_pylint_flake8.png)
 
 L'image ci-dessus démontre l'application réussie des meilleures pratiques de codage, montrant :
 - Aucun problème majeur de qualité de code
