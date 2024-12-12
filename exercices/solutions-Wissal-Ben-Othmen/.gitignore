@@ -1,3 +1,4 @@
 # Ignore Google Cloud service account credentials
 *.json
 !requirements.txt
+tp_4/dauphine-437611-186fb1bafc83.json
