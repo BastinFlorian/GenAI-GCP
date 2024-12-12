@@ -26,7 +26,7 @@ J'ai développé avec succès une application de génération d'histoires conver
 
 ### Qualité du Code
 J'ai rigoureusement appliqué les meilleures pratiques de développement Python :
-![Pylint et Flake8](../Tp3_pylint_flake8.png)
+![Pylint et Flake8](../screenshots//Tp3_pylint_flake8.png)
 
 - Utilisation de Pylint et Flake8 pour l'analyse statique du code
 - Respect des conventions PEP 8
@@ -62,11 +62,6 @@ J'ai rigoureusement appliqué les meilleures pratiques de développement Python 
 - Gestion de l'état de conversation
 - Déploiement cloud
 - Respect des bonnes pratiques de codage
-
-## Captures d'Écran de Validation
-
-### Validation Pylint et Flake8
-![Validation Code](../Tp3_pylint_flake8.png)
 
 ## Conclusion
 
