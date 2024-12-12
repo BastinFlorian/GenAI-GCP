@@ -1,0 +1,3 @@
+# Ignore Google Cloud service account credentials
+*.json
+!requirements.txt
