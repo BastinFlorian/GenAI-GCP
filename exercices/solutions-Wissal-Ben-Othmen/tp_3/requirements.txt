@@ -1,0 +1,15 @@
+# Streamlit
+streamlit
+
+# API
+fastapi
+pydantic
+uvicorn
+pydantic
+requests
+python-dotenv==1.0.1
+
+# TODO Install the required dependencies
+langchain_community
+langchain
+langchain_google_genai

@@ -1,0 +1,31 @@
+# Use Python 3.9 to satisfy dependency requirements
+FROM python:3.9-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Install system dependencies including Rust
+RUN apt-get update && \
+    apt-get install -y \
+        libmagic1 \
+        curl \
+        build-essential \
+        && rm -rf /var/lib/apt/lists/* && \
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    PATH="/root/.cargo/bin:${PATH}"
+
+# Copy requirements file
+COPY requirements.txt .
+
+# Install dependencies (removing Windows-specific packages)
+RUN . "$HOME/.cargo/env" && \
+    pip install --upgrade pip && \
+    grep -v -E "python-magic-bin|pywin32|pywinpty" requirements.txt > requirements_cleaned.txt && \
+    pip install -r requirements_cleaned.txt && \
+    pip install python-magic
+
+# Copy the rest of the application code into the container
+COPY . /app
+
+# Command to run the application
+CMD ["sh", "-c", "uvicorn api:app --host 0.0.0.0 --port ${PORT:-8080}"]
