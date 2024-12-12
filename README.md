@@ -94,4 +94,77 @@ You will encounter many errors during development. Don't worry; it's part of the
 - ERROR: Cannot connect to the Docker daemon # Docker app is not opened
 - An env variable is not recognized # Check the .env file, run source .env in the terminal, load_dotenv() in the Python file
 ```
+GenAIGCPmain (Projet Google Cloud Platform)
+
+### Description
+Ce projet se concentre sur le déploiement d'applications RAG (Retrieval-Augmented Generation) sur Google Cloud Platform. Il met en pratique les concepts d'IA générative dans un environnement cloud professionnel.
+
+### Prérequis Techniques
+- Python 3.11 ou supérieur
+- Docker
+- VS Code
+- GCloud SDK
+- Cloud SQL Proxy
+- Conda/Miniconda
+
+### Configuration de l'Environnement GCP
+```bash
+conda create --name genai_gcp python=3.11
+conda activate genai_gcp
+pip install -r requirements.txt
+
+# Configuration GCP
+gcloud init
+gcloud auth login
+gcloud auth application-default login
+```
+
+### Structure du Projet
+- `arena/` : Zone de développement principal
+- `exercices/` : Exercices pratiques de déploiement
+- `terraform/` : Scripts d'infrastructure as code
+- `docs/` : Documentation technique
+
+### Critères d'Évaluation
+1. **Qualité du Code**
+   - Utilisation de Flake8 et Pylint
+   - Respect des standards PEP8
+   - Type hints
+   - Documentation appropriée
+   - Organisation en classes et fonctions
+
+2. **Déploiement GCP**
+   - Application fonctionnelle sur GCP
+   - Interface utilisateur opérationnelle
+   - Gestion appropriée des ressources cloud
+
+### Règles Importantes
+- Préfixer tous les éléments déployés sur GCP avec vos initiales
+- Maintenir une organisation claire du code
+- Éviter les déploiements multiples simultanés
+
+## Vérification de la Qualité du Code
+
+### TP 1
+Résultats des tests de qualité :
+![Pylint & Flake8 TP1](exercices/tp_1/Screenshot_1.png)
+
+### TP 2
+Résultats des tests de qualité :
+![Pylint & Flake8 TP2](exercices/tp_2/Screenshot_2.png)
+
+### TP 3
+Résultats des tests de qualité :
+![Pylint & Flake8 TP3](exercices/tp_3/Screenshot_1.png)
+
+### TP 4
+Résultats des tests de qualité :
+![Pylint & Flake8 TP4](exercices/tp_4/Screenshot_1.png)
+![Pylint & Flake8 TP4](exercices/tp_4/Screenshot_2.png)
+![Pylint & Flake8 TP4](exercices/tp_4/Screenshot_3.png)
+## Outils de Qualité du Code
+
+Les projets utilisent plusieurs outils pour maintenir une haute qualité de code :
+- **Pylint** : Vérification de la conformité avec les conventions PEP 8
+- **Flake8** : Détection des erreurs de style et des bugs potentiels
 
