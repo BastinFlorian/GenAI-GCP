@@ -8,7 +8,7 @@ COPY requirements.txt /requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /requirements.txt
 
-ENV PORT=8080
+ENV PORT=8501
 
 EXPOSE ${PORT}
 

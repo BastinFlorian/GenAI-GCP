@@ -3,7 +3,7 @@
 
 The goal of this session is to separate the backend from the frontend. The backend will be a FastAPI that will be deployed on GCP. The frontend will be a Streamlit app that will also be deployed on GCP.
 
-### 2.1 Create the FastAPI
+### 2.1 Create the FasAPI
 
 - Open the `exercices/tp_2/api.py` file and edit it to create a FastAPI that will return the response to a given question from part 1.
 - Modify the `exercices/tp_2/app.py` file to call the FastAPI instead of the Streamlit app.
@@ -16,6 +16,7 @@ Create a custom Docker network that both containers will use to communicate with
 ```bash
 docker network create my_network
 ```
+#docker network create aicha_network
 
 Build and run the FastAPI container:
 ```bash
@@ -26,10 +27,10 @@ docker run --name fastapi-container -p 8181:8181 api:latest
 
 Test with a curl command. Edit the localhost with the chosen PORT:
 ```bash
-curl -X 'POST' \
-    'http://localhost:8181/answer' \
-    -H 'accept: application/json' \
-    -H 'Content-Type: application/json' \
+curl -X 'POST' 
+    "http://127.0.0.1:8000/answer"
+    -H 'accept: application/json' 
+    -H 'Content-Type: application/json' 
     -d '{
     "name": "What is your name?"
 }'
