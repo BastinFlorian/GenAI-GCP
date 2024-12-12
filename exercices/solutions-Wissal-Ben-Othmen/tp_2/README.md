@@ -20,7 +20,7 @@ Deux outils principaux ont été utilisés pour garantir la qualité du mon code
 - **Flake8** : Vérification du respect des normes de style PEP 8
 
 ### Capture d'Écran de Vérification
-![Vérification de Qualité Pylint et Flake8](Tp2_pylint_flake8.png)
+![Vérification de Qualité Pylint et Flake8](../screenshots/Tp2_pylint_flake8.png)
 
 Points clés de la vérification de qualité :
 - Aucun problème majeur de qualité de code détecté
