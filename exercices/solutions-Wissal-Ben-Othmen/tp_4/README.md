@@ -29,19 +29,16 @@ J'ai avec succès terminé et déployé ce projet TP4 sur Google Cloud Platform 
 ## Captures d'Écran de Validation
 
 ### Vérification de Qualité de Code
-![Pylint et Flake8 - Capture 1](Tp4_pylint_flake8(1).png)
-![Pylint et Flake8 - Capture 2](Tp4_pylint_flake8(2).png)
+![Pylint et Flake8 - Capture 1](../screenshots/Tp4_pylint_flake8(1).png)
+![Pylint et Flake8 - Capture 2](../screenshots/Tp4_pylint_flake8(2).png)
 
 ### Captures d'Écran de l'Application
 
 #### Capture d'écran de la page d'accueil
-![Capture d'écran de la page d'accueil](capture_page_accueil.png)
-
-#### Capture d'écran de recherche de documents
-![Capture d'écran de recherche de documents](capture_recherche_documents.png)
+![Capture d'écran de la page d'accueil](../screenshots/Capture d'écran 2024-12-12 144306.png)
 
 #### Capture d'écran de résultats de requête
-![Capture d'écran de résultats de requête](capture_resultats_requete.png)
+![Capture d'écran de résultats de requête](../screenshots/Capture d'écran 2024-12-12 144352.png)
 
 ## Conclusion
 
