@@ -1,21 +1,27 @@
-"""Streamlit app"""
-import streamlit as st
 import requests
+import streamlit as st
 
-# TODO
-# HOST = "http://[container_name]:[host]/answer"
+# Streamlit app title
+st.title("Hello, Streamlit!")
 
-st.title('Hello, Streamlit!')
-message = st.text_input('Say something')
-if message:
-    # TODO
+# Form elements
+name = st.text_input("Enter your name")
+genre = st.selectbox("Select gender", ["female", "male", "other"])
+language = st.selectbox("Select language", ["English", "French", "Spanish"])
+
+# Submit button
+if st.button("Submit"):
+    # Prepare data to send in the POST request
+    data = {"name": name, "genre": genre, "language": language}
+    
+    # Use the FastAPI Cloud Run URL
     response = requests.post(
-        HOST,
-        ...
-        json=...,
-        timeout=20
+        "https://fastapi-service-1021317796643.europe-west1.run.app/answer",  # Updated to Cloud Run URL
+        json=data  # Send data as JSON
     )
+    
+    # Handle response from FastAPI server
     if response.status_code == 200:
-        st.write(response.json()["message"])
+        st.write(response.json()["message"])  # Display response message
     else:
-        st.write("Error: Unable to get a response from the API")
+        st.write("Error:", response.status_code)

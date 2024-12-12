@@ -63,7 +63,7 @@ docker run --name streamlit-container --network my_network -p 8080:8080 streamli
 # --network my_network is used to connect the container to the network created
 # Open the localhost URL given
 ```
-
+docker 
 If you encounter an error like this:
 ```
 ConnectionError: HTTPConnectionPool(host='fastapi-container', port=8181): Max retries exceeded with URL: /answer (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0xffff86bb9a50>: Failed to resolve 'fastapi-container' ([Errno -2] Name or service not known)"))

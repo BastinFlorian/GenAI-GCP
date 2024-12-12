@@ -8,11 +8,10 @@ COPY requirements.txt /requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /requirements.txt
 
-ENV PORT= ##TODO CHOOSE ME ACCORDINGLY TO docker build command, see README##
+ENV PORT=8501
 
 EXPOSE ${PORT}
 
 COPY . ./app
 
 ENTRYPOINT streamlit run --server.port ${PORT} app/app.py –-server.address=0.0.0.0
-

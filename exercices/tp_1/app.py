@@ -1,8 +1,9 @@
-"""Streamlit app"""
 import streamlit as st
 
-
+# App title
 st.title('Hello, Streamlit!')
-message = st.text_input('Say something')
-if message:
-    st.write(f'You said: {message}')
+
+# Sidebar selection for language and gender
+language = st.sidebar.selectbox('Language', ['English', 'French'])
+gender = st.sidebar.selectbox('Gender', ['Man', 'Woman'])
+
