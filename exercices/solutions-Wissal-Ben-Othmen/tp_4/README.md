@@ -38,7 +38,7 @@ J'ai avec succès terminé et déployé ce projet TP4 sur Google Cloud Platform 
 ![Capture d'écran de la page d'accueil](../screenshots/Capture_d'écran_2024-12-12_144306.png)
 
 #### Capture d'écran de résultats de requête
-![Capture d'écran de résultats de requête](../screenshots/Capture d'écran 2024-12-12 144352.png)
+![Capture d'écran de résultats de requête](../screenshots/Capture_d'écran_2024-12-12_144352.png)
 
 ## Conclusion
 
