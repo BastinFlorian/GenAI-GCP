@@ -1,0 +1,23 @@
+version: '3'
+services:
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8502:8501"  # Redirection du port 8501 à 8502
+    networks:
+      - app-network
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile_api
+    ports:
+      - "8501:8501"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

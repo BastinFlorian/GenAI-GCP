@@ -1,18 +1,17 @@
-FROM python:3.11
+# Use the official Streamlit base image
+FROM python:3.11-slim
 
+# Set the working directory
 WORKDIR /app
 
-ENV PYTHONUNBUFFERED True
+# Copy the requirements file into the container
+COPY requirements.txt .
 
-COPY requirements.txt /requirements.txt
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install --no-cache-dir --upgrade -r /requirements.txt
+# Copy the rest of the application code
+COPY . .
 
-ENV PORT= ##TODO CHOOSE ME ACCORDINGLY TO docker build command, see README##
-
-EXPOSE ${PORT}
-
-COPY . ./app
-
-ENTRYPOINT streamlit run --server.port ${PORT} app/app.py –-server.address=0.0.0.0
-
+# Command to run the Streamlit app
+CMD ["streamlit", "run", "your_app.py"]  # Replace 'your_app.py' with your actual Streamlit app filename

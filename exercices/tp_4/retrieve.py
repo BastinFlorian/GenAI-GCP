@@ -16,8 +16,21 @@ def get_relevant_documents(query: str, vector_store: PostgresVectorStore) -> lis
     Returns:
         list[Document]: A list of documents relevant to the query.
     """
-    retriever =  # TODO
-    return retriever.invoke(query)
+    
+    #retriever =  vector_store.as_retriever() ### TODO
+    #return retriever.invoke(query)
+    results = vector_store.similarity_search_with_relevance_scores(query = query, k=4)  # Adjust `k` if needed
+    #print("Results:", results)  # Debugging output
+
+    # Check if scores are present in the results
+    if results and isinstance(results[0], Document):
+        relevant_docs = results  # Assume documents are relevant if no scores
+    else:
+        relevant_docs = [doc for doc, score in results if score >= 0.6]
+    
+    for doc in relevant_docs:
+        doc.metadata["score"] = doc.metadata.get("score", "N/A")  # Add a default score
+    return relevant_docs
 
 def format_relevant_documents(documents: list[Document]) -> str:
     """
@@ -42,8 +55,8 @@ def format_relevant_documents(documents: list[Document]) -> str:
         '''
     """
     # TOUPDATE with example in docstring
-    return "\n".join([doc.page_content for doc in documents])
-
+    #return "\n".join([doc.page_content for doc in documents])
+    return "\n".join([f"Source {i+1}: {doc.page_content}" for i, doc in enumerate(documents)])
 
 if __name__ == '__main__':
     # Test get_relevant_documents

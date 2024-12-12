@@ -4,9 +4,9 @@ from typing import Dict, List
 import streamlit as st
 import requests
 
-# HOST = "http://0.0.0.0:8181/answer"  # Docker run name of Fast API
-HOST = "http://0.0.0.0:8181"
-HOST = "https://fb-api-1021317796643.europe-west1.run.app"  # Cloud Run
+HOST = "http://localhost:8181"  # Docker run name of Fast API
+#HOST = "http://127.0.0.1:8181/answer"
+#HOST = "https://ac4-api-1021317796643.europe-west1.run.app"  # Cloud Run
 
 st.title('Hello, Streamlit!')
 
@@ -31,7 +31,7 @@ if question := st.chat_input("What is your question ?"):
     st.chat_message("user", avatar="🧑‍💻").write(question)
 
     response = requests.post(
-        os.path.join(HOST, "answer"),
+        f"{HOST}/answer",
         json={
             "question": question,
             "temperature": temperature,
@@ -41,7 +41,7 @@ if question := st.chat_input("What is your question ?"):
     )
 
     documents = requests.post(
-        os.path.join(HOST, # TODO),
+        f"{HOST}/get_sources",
         json={
             "question": question,
             "temperature": temperature,
