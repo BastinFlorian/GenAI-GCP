@@ -12,20 +12,37 @@ class UserInput(BaseModel):
 
     Attributes:
         name (str): The name of the user.
-        genre (str): The genre preference of the user.
-        language (str): The language preference of the user.
+        genre (str): The gender of the user, either "Man" or "Woman".
+        language (str): The language preference of the user, either
+            "English" or "French".
     """
-    # TODO fill the required attributes
+    name: str
+    genre: str
+    language: str
 
 
 @app.post("/answer")
 def answer(user_input: UserInput):
     """
     Generates a greeting message based on the user's input.
+
     Args:
-        user_input (UserInput): An object containing user details such as name, genre, and language.
+        user_input (UserInput): An object containing user details such as
+            name, genre, and language.
+
     Returns:
         dict: A dictionary containing a greeting message.
     """
-    # TODO edit the implementation to match the required ouput from #1
-    return {"message": f"Hello Mr {user_input.name} from {user_input.genre}, {user_input.language}"}
+    # Determine greeting based on language and gender
+    if user_input.language == "English" and user_input.genre == "Man":
+        greeting = f"Hello Mr. {user_input.name}"
+    elif user_input.language == "French" and user_input.genre == "Woman":
+        greeting = f"Bonjour madame {user_input.name}"
+    elif user_input.language == "English" and user_input.genre == "Woman":
+        greeting = f"Hello Ms. {user_input.name}"
+    elif user_input.language == "French" and user_input.genre == "Man":
+        greeting = f"Bonjour monsieur {user_input.name}"
+    else:
+        greeting = f"Hello {user_input.name}"  # Default message
+
+    return {"message": greeting}

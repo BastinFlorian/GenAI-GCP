@@ -1,23 +1,21 @@
+# Use official Python image as the base image
+FROM python:3.11
 
+# Set the environment variable for unbuffered output (useful for logging)
+ENV PYTHONUNBUFFERED=True
 
-# Use the official Python image from the Docker Hub
-FROM python:3.11-slim
+# Copy requirements.txt to the container and install dependencies
+COPY requirements.txt /requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /requirements.txt
 
-# Set the working directory in the container
-WORKDIR /app
+# Copy the entire app code to the container
+COPY . .
 
-# Copy the requirements file into the container
-COPY requirements.txt .
+# Set the entry point to run the FastAPI app with Uvicorn
+ENTRYPOINT ["sh", "-c", "uvicorn api:app --host=0.0.0.0 --port=$PORT"]
 
-# Install the dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Default to port 8181 if not specified
+ENV PORT 8181
 
-# Copy the rest of the application code into the container
-COPY . ./app
-
-# Expose the port the app runs on
+# Expose the port (default is 8181)
 EXPOSE 8181
-
-# Command to run the application
-CMD ["uvicorn", "app.api:app", "--host", "0.0.0.0", "--port", "8181"]
-

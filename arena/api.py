@@ -13,16 +13,6 @@ class EloUpdateRequest(BaseModel):
     result: str  # 'win', 'draw', or 'lose' for model1
     elo_type: str # 'elo', 'elo_llm', or 'elo_question'
 
-
-class RecordRequest(BaseModel):
-    model_1_name: str
-    model_2_name: str
-    preference: str  # 'win', 'lose', or 'draw'
-    question: str
-    answer_model_1: str
-    answer_model_2: str
-
-
 def compute_elo(current_elo, opponent_elo, result, k=32) -> int:
     expected_score = 1 / (1 + 10 ** ((opponent_elo - current_elo) / 400))
     if result == 'win':
@@ -91,6 +81,14 @@ def get_model_ranking():
             f"SELECT name, elo, elo_llm, elo_question FROM {ARENA_TABLE} ORDER BY elo DESC")
         result = db_conn.execute(query).fetchall()
         return [{"name": row[0], "elo": row[1], "elo_llm": row[2], "elo_question": row[3]} for row in result]
+
+class RecordRequest(BaseModel):
+    model_1_name: str
+    model_2_name: str
+    preference: str  # 'win', 'lose', or 'draw'
+    question: str
+    answer_model_1: str
+    answer_model_2: str
 
 @app.post("/record_result")
 def record_result(request: RecordRequest):
