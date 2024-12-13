@@ -59,7 +59,7 @@ streamlit run app.py
 Build the Docker image and run it:
 ```bash
 docker build -t streamlit:latest -f Dockerfile .
-docker run --name streamlit-container --network my_network -p 8080:8080 streamlit:latest
+docker run --name streamlit-container --network my_network -p 8501:8501 streamlit:latest
 # --network my_network is used to connect the container to the network created
 # Open the localhost URL given
 ```
@@ -99,20 +99,22 @@ gcloud auth configure-docker europe-west1-docker.pkg.dev
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
 # Investigate on to run docker in your specific machine otherwise with Chat GPT
 # Keep the solution, it will be useful for the next commands
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<my-docker-name>:latest -f Dockerfile_api .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/rm_api:latest -f Dockerfile_api .
 
 # Be careful, the default port is 8080 for Cloud Run.
 # If you encounter an error message, edit the default Cloud Run port on the interface or in the command line
-gcloud run deploy <my-app-name> \
-        --image=<my-region>-docker.pkg.dev/<my-project-id>/dauphine-ar/<my-docker-image-name>:latest \
-        --platform=managed \
-        --region=<my-region> \
-        --allow-unauthenticated \
-        --port=8181
+gcloud run deploy rm-api --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/rm_api:latest --platform=managed --region=europe-west1 --allow-unauthenticated --port=8181
+
 ```
 
 - Change the HOST in your `app.py` to the URL of the FastAPI.
-Example: `HOST = "https://fb-1021317796643.europe-west1.run.app/answer"`
+
+# Connecte-toi à Google Cloud Console.
+# Va dans la section Cloud Run (si tu déploies ton API via Cloud Run).
+# Cherche ton service FastAPI dans la liste des services déployés.
+# Une fois que tu as trouvé ton service, tu verras une URL publique associée
+
+Example: ` HOST = "https://rm-api-1021317796643.europe-west1.run.app/answer" `
 
 #### Deploy the Streamlit App
 
@@ -121,11 +123,8 @@ Example: `HOST = "https://fb-1021317796643.europe-west1.run.app/answer"`
 # Replace <my-docker-image-name> and <my-app-name> with your initials + _streamlit
 # Example: Florian Bastin -> <my-docker-image-name>fb_streamlit
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<my-docker-name>:latest -f Dockerfile .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/rm_tp2-streamlit:latest -f Dockerfile .
 
-gcloud run deploy <my-app-name> \
-        --image=<my-region>-docker.pkg.dev/<my-project-id>/dauphine-ar/<my-docker-image-name>:latest \
-        --platform=managed \
-        --region=<my-region> \
-        --allow-unauthenticated
+gcloud run deploy rm-tp2-streamlit --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/rm_tp2-streamlit:latest --platform=managed --region=europe-west1 --allow-unauthenticated
+
 ```

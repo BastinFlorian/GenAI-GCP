@@ -8,5 +8,11 @@ uvicorn
 pydantic
 requests
 python-dotenv==1.0.1
+langchain_google_genai
+langchain
 
-# TODO Install the required dependencies
+# LangChain pour la gestion des LLM (Large Language Models)
+langchain
+openai
+google-cloud
+

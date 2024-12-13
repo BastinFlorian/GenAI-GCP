@@ -8,7 +8,8 @@ COPY requirements.txt /requirements.txt
 
 RUN pip install --no-cache-dir --upgrade -r /requirements.txt
 
-ENV PORT= ##TODO CHOOSE ME ACCORDINGLY TO docker build command, see README##
+ARG PORT=8501
+ENV PORT=${PORT}
 
 EXPOSE ${PORT}
 

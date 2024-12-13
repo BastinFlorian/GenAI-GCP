@@ -10,9 +10,9 @@ RUN pip install --no-cache-dir --upgrade -r /requirements.txt
 
 ENV PORT=8080
 
-EXPOSE ${PORT}
+EXPOSE 8080
 
 COPY . ./app
 
-ENTRYPOINT streamlit run --server.port ${PORT} app/app.py –-server.address=0.0.0.0
+ENTRYPOINT ["streamlit", "run", "--server.port", "8080", "--server.address", "0.0.0.0", "app/app.py"]
 

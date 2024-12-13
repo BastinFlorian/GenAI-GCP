@@ -42,14 +42,14 @@ Open and edit the `Dockerfile` as required to match the port exposed below. We c
 
 ```bash
 docker build -t streamlit:latest .
-docker run --name my_container -p 8080:8080 streamlit:latest
+docker run --name my_container -p 8501:8501 streamlit:latest
 # Open the URL given
 ```
 
 Once it works, you can use the following commands:
 
 ```bash
-docker stop <my_container>
+docker stop my_container
 docker rm <my_container>
 # Then you can rerun docker run -p 8080:8080 streamlit:latest without any problems
 # If you have an "already in use" error, do the previous steps before rerunning
@@ -67,10 +67,10 @@ gcloud auth configure-docker europe-west1-docker.pkg.dev
 # Replace <my-docker-image-name> and <my-app-name> with your initials + -streamlit
 # Example: Florian Bastin -> <my-docker-image-name>=fb-streamlit
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/<my-project-id>/<my-registry-name>/<my-docker-image-name>:latest -f Dockerfile .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/rm-streamlit:latest -f Dockerfile .
 
-gcloud run deploy <my-app-name> \
-        --image=europe-west1-docker.pkg.dev/<my-project-id>/<my-registry-name>/<my-docker-image-name>:latest \
+gcloud run deploy rm-streamlit \
+        --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/rm-streamlit:latest \
         --platform=managed \
         --region=europe-west1 \
         --allow-unauthenticated
