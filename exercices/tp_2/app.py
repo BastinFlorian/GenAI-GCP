@@ -2,17 +2,25 @@
 import streamlit as st
 import requests
 
-# TODO
-# HOST = "http://[container_name]:[host]/answer"
+
+HOST = "https://yba-api-1021317796643.europe-west1.run.app/answer"
+
+st.sidebar.write("Select Languages:")
+language = st.sidebar.selectbox("Language", ["English", "French"])
+
+# Create a sidebar for gender selection
+st.sidebar.write("Select Gender:")
+gender = st.sidebar.selectbox("Gender", ["Man", "Woman"])
 
 st.title('Hello, Streamlit!')
 message = st.text_input('Say something')
+
+
 if message:
-    # TODO
     response = requests.post(
         HOST,
-        ...
-        json=...,
+        
+        json={"name": message, "genre": gender, "language": language},
         timeout=20
     )
     if response.status_code == 200:

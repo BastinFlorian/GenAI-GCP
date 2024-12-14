@@ -7,6 +7,8 @@ from langchain_core.documents.base import Document
 from langchain_google_cloud_sql_pg import PostgresEngine, PostgresVectorStore
 from langchain_google_vertexai import VertexAIEmbeddings
 from langchain_unstructured import UnstructuredLoader
+from google.cloud.exceptions import NotFound
+from google.cloud.exceptions import GoogleCloudError
 # Non sensitive information goes in config
 from config import PROJECT_ID, REGION, INSTANCE, DATABASE, BUCKET_NAME, DB_USER
 
@@ -29,8 +31,8 @@ def list_files_in_bucket(client: storage.Client, bucket_name: Bucket, directory_
     Returns:
         list[str]: A list of file names in the specified bucket.
     """
-    bucket = client. # TODO
-    blobs = bucket.  # TODO
+    bucket = client.get_bucket(bucket_name) 
+    blobs = bucket.list_blobs(prefix=directory_name) 
     return [blob.name for blob in blobs]
 
 
@@ -53,12 +55,18 @@ def download_file_from_bucket(bucket: Bucket, file_path: str, download_directory
     Example:
         local_path = download_file_from_bucket(bucket, 'path/to/file.txt', '/local/download/directory')
     """
-    blob =  # TODO
-    local_file_name = os.path.basename(file_path)
-    local_filepath = os.path.join(download_directory_path, local_file_name)
-    blob.download_to_filename(local_filepath)
-    print(f"Downloaded '{file_path}' to '{local_file_name}'")
-    return local_filepath
+    try:
+        blob = bucket.blob(file_path)
+        local_file_name = os.path.basename(file_path)
+        local_filepath = os.path.join(download_directory_path, local_file_name)
+        try:
+            blob.download_to_filename(local_filepath)
+            print(f"Downloaded '{file_path}' to '{local_file_name}'")
+            return local_filepath
+        except GoogleCloudError:
+            print("Error during download process")
+    except NotFound:
+        print("Error: File does not exist in the bucket")
 
 
 def read_file_from_local(local_filepath: str) -> list[Document]:
@@ -71,8 +79,8 @@ def read_file_from_local(local_filepath: str) -> list[Document]:
     Returns:
         list[Document]: A list of Document objects loaded from the specified file.
     """
-    loader =  # TODO
-    documents =  # TODO
+    loader =  UnstructuredLoader(local_filepath)
+    documents = list(loader.lazy_load())
     return documents
 
 
@@ -86,7 +94,27 @@ def merge_documents_by_page(documents: list[Document]) -> list[Document]:
     Returns:
         list[Document]: A list of merged Document objects, where each Document contains the concatenated content of all documents with the same page number.
     """
-    # TODO
+    merged_documents: list[Document] = []
+    page_dict = {}
+
+    # Group documents by page number
+    for doc in documents:
+        page_number = doc.metadata.get('page_number')
+        if page_number is not None:
+            if page_number not in page_dict:
+                page_dict[page_number] = [doc]
+            else:
+                page_dict[page_number].append(doc)
+
+    # Merge documents for each page
+    for page_number, docs in page_dict.items():
+        if docs:
+            # Use the metadata of the first document in the group
+            merged_metadata = docs[0].metadata
+            # Concatenate the page content of all documents in the group
+            merged_content = '\n'.join(doc.page_content for doc in docs)
+            # Create a new Document with merged content and metadata
+            merged_documents.append(Document(page_content=merged_content,metadata=merged_metadata))
 
     return merged_documents
 
@@ -104,9 +132,18 @@ def create_cloud_sql_database_connection() -> PostgresEngine:
     Example:
         connection = create_cloud_sql_database_connection()
     """
-    # TODO
+    engine = PostgresEngine.from_instance(
+    project_id=PROJECT_ID,
+    instance=INSTANCE,
+    region=REGION,
+    database=DATABASE,
+    user=DB_USER,
+    password=DB_PASSWORD,
+    )
+    return engine
 
-def create_table_if_not_exists(table_name: str, engine: PostgresEngine) -> None:
+
+async def create_table_if_not_exists(table_name: str, engine: PostgresEngine) -> None:
     """
     Creates a table in the vector store if it does not already exist.
 
@@ -123,7 +160,10 @@ def create_table_if_not_exists(table_name: str, engine: PostgresEngine) -> None:
         ProgrammingError: If the table already exists.
     """
     try:
-        # TODO
+        await engine.init_vectorstore_table(
+            table_name=table_name,
+            vector_size=768,
+        )
     except ProgrammingError:
         print("Table already created")
 
@@ -138,7 +178,13 @@ def get_embeddings() -> VertexAIEmbeddings:
     Example:
         embeddings = get_embeddings()
     """
-    # TODO
+    embedding = VertexAIEmbeddings(
+        model_name='text-embedding-004',
+        project=PROJECT_ID
+    )
+
+    return embedding
+    
 
 def get_vector_store(engine: PostgresEngine, table_name: str, embedding: VertexAIEmbeddings) -> PostgresVectorStore:
     """
@@ -155,7 +201,12 @@ def get_vector_store(engine: PostgresEngine, table_name: str, embedding: VertexA
     Example:
         vector_store = get_vector_store(engine, 'my_table', embedding)
     """
-    # TODO
+    vector_store = PostgresVectorStore.create_sync(
+         engine=engine,
+         table_name=table_name,
+         embedding_service=embedding,
+         )
+    return vector_store
 
 if __name__ == '__main__':
     # Test list_files_in_bucket
@@ -183,7 +234,7 @@ if __name__ == '__main__':
     assert engine is not None, "Database connection not established successfully"
 
     # Test create_table_if_not_exists
-    table_name = "my_table"
+    table_name = "ybena_table"
     create_table_if_not_exists(table_name, engine)
 
     # Test get_embeddings

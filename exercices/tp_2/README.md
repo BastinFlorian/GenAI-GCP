@@ -94,15 +94,15 @@ docker-compose up --build
 # Replace <my-docker-image-name> and <my-app-name> with your initials + _api
 # Example: Florian Bastin -> <my-docker-image-name>fb_api
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<my-docker-name>:latest -f Dockerfile_api .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/yba-api:latest -f Dockerfile_api .
 
 # Be careful, the default port is 8080 for Cloud Run.
 # If you encounter an error message, edit the default Cloud Run port on the interface or in the command line
-gcloud run deploy <my-app-name> \
-        --image=<my-region>-docker.pkg.dev/<my-project-id>/<my-registry-name>/<my-docker-image-name>:latest \
-        --platform=managed \
-        --region=<my-region> \
-        --allow-unauthenticated \
+gcloud run deploy yba-api 
+        --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/yba-api:latest 
+        --platform=managed 
+        --region=europe-west1 
+        --allow-unauthenticated 
         --port=8181
 ```
 
@@ -116,11 +116,7 @@ Example: `HOST = "https://fb-1021317796643.europe-west1.run.app/answer"`
 # Replace <my-docker-image-name> and <my-app-name> with your initials + _streamlit
 # Example: Florian Bastin -> <my-docker-image-name>fb_streamlit
 # Replace docker buildx build --platform linux/amd64 with docker build -t if it does not work
-docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/<my-docker-name>:latest -f Dockerfile .
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/yba-streamlit:latest -f Dockerfile .
 
-gcloud run deploy <my-app-name> \
-        --image=<my-region>-docker.pkg.dev/<my-project-id>/<my-registry-name>/<my-docker-image-name>:latest \
-        --platform=managed \
-        --region=<my-region> \
-        --allow-unauthenticated
+gcloud run deploy yba-streamlit --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/yba-streamlit:latest  --platform=managed --region=europe-west1 --allow-unauthenticated
 ```

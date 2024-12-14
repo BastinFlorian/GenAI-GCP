@@ -16,7 +16,10 @@ def get_relevant_documents(query: str, vector_store: PostgresVectorStore) -> lis
     Returns:
         list[Document]: A list of documents relevant to the query.
     """
-    retriever =  # TODO
+    retriever = vector_store.as_retriever(
+        search_type="mmr",
+        search_kwargs={'k': 4, 'lambda_mult': 0.3}
+    )
     return retriever.invoke(query)
 
 def format_relevant_documents(documents: list[Document]) -> str:

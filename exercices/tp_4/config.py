@@ -11,4 +11,4 @@ DB_USER = "students"
 
 # Cloud Storage
 BUCKET_NAME = "dauphine-bucket"
-TABLE_NAME = "fb_table"
+TABLE_NAME = "ybena_table"
