@@ -1,0 +1,15 @@
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile_api
+    container_name: fastapi-container
+    ports:
+      - "8181:8181"
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: streamlit-container
+    ports:
+      - "8080:8080"
