@@ -4,7 +4,6 @@ from langchain_google_cloud_sql_pg import PostgresVectorStore
 from langchain_core.documents.base import Document
 from config import TABLE_NAME
 
-
 def get_relevant_documents(query: str, vector_store: PostgresVectorStore) -> list[Document]:
     """
     Retrieve relevant documents based on a query using a vector store.
@@ -16,8 +15,11 @@ def get_relevant_documents(query: str, vector_store: PostgresVectorStore) -> lis
     Returns:
         list[Document]: A list of documents relevant to the query.
     """
-    retriever =  # TODO
-    return retriever.invoke(query)
+    retriever= vector_store.as_retriever(
+        search_kwargs={"k": 4},
+    )
+    relevant_docs = retriever.invoke(query)
+    return relevant_docs
 
 def format_relevant_documents(documents: list[Document]) -> str:
     """
@@ -32,8 +34,8 @@ def format_relevant_documents(documents: list[Document]) -> str:
     Example:
         >>> documents = [
             Document(page_content: "First doc", metadata: {"title": "Doc 1"}),
-            Document(page_content: "Second doc", metadata: {"title": "Doc 1"}
-        ]s
+            Document(page_content: "Second doc", metadata: {"title": "Doc 1"})
+        ]
         >>> doc_str: str = format_relevant_documents(documents)
         >>> '''
             Source 1: First doc
@@ -41,20 +43,17 @@ def format_relevant_documents(documents: list[Document]) -> str:
             Source 2: Second doc
         '''
     """
-    # TOUPDATE with example in docstring
-    return "\n".join([doc.page_content for doc in documents])
-
+    return "\n".join(
+        [f"Source {i+1}: {doc.page_content}\n-----" for i, doc in enumerate(documents)]
+    )
 
 if __name__ == '__main__':
-    # Test get_relevant_documents
     engine = create_cloud_sql_database_connection()
     embedding = get_embeddings()
     vector_store = get_vector_store(engine, TABLE_NAME, embedding)
     documents = get_relevant_documents("large language modelss", vector_store)
     assert len(documents) > 0, "No documents found for the query"
-
-    # Test format_relevant_documents
     doc_str: str = format_relevant_documents(documents)
     assert len(doc_str) > 0, "No documents formatted successfully"
-
     print("All tests passed successfully.")
+    

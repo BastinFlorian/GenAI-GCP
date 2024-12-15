@@ -9,12 +9,12 @@ services:
     networks:
       - my_network
     ports:
-      - "8080:8080" # TODO EDIT ACCORDINGLY
+      - "8181:8181" # TODO EDIT ACCORDINGLY
 
   streamlit:
     build:
       context: .
-      dockerfile: Dockerfile_streamlit
+      dockerfile: Dockerfile
     container_name: streamlit-container
     networks:
       - my_network

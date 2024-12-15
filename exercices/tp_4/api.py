@@ -1,84 +1,97 @@
-"""API"""
-import os
 from typing import List
-from langchain_google_vertexai import VertexAIEmbeddings
 from fastapi import FastAPI
 from pydantic import BaseModel
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
-import os
 from dotenv import load_dotenv
-from langchain_google_cloud_sql_pg import PostgresEngine
-from langchain_google_cloud_sql_pg import PostgresEngine
-
 from ingest import create_cloud_sql_database_connection, get_embeddings, get_vector_store
 from retrieve import get_relevant_documents, format_relevant_documents
 from config import TABLE_NAME
+#import logging
+
 load_dotenv()
 
 app = FastAPI()
 
 # Initialize once and reuse
-ENGINE = # TODO
-EMBEDDING = # TODO
+ENGINE = create_cloud_sql_database_connection()
+EMBEDDING = get_embeddings()
 
-
-class UserInput(BaseModel):
-    """
-    UserInput is a data model representing user input.
-
-    Attributes:
-        question (str): The question of the user.
-        temperature (float): The temperature of the user.
-        language (str): The language preference of the user.
-    """
-    question: str
-    temperature: float
-    language: str
-
+# Logger setup
+#logger = logging.getLogger(__name__)
 
 class DocumentResponse(BaseModel):
     page_content: str
     metadata: dict
 
+class UserInput(BaseModel):
+    question: str
+    temperature: float
+    language: str
+    documents: List[DocumentResponse] = None
 
 @app.post("/get_sources", response_model=List[DocumentResponse])
 def get_sources(user_input: UserInput) -> List[DocumentResponse]:
-    relevants_docs = # TODO
-    return [{"page_content": doc.page_content, "metadata": doc.metadata} for doc in relevants_docs]
+    vector_store = get_vector_store(ENGINE, TABLE_NAME, EMBEDDING)
+    relevants_docs = get_relevant_documents(
+        user_input.question,
+        vector_store,
+    )
 
+    if not relevants_docs:
+        return []
+
+    # else
+    return [
+        DocumentResponse(page_content=doc.page_content, metadata=doc.metadata)
+        for doc in relevants_docs ]
 
 
 @app.post("/answer")
 def answer(user_input: UserInput):
     """
-    Generates a greeting message based on the user's input.
-    Args:
-        user_input (UserInput): An object containing user details such as name, genre, and language.
-    Returns:
-        dict: A dictionary containing a greeting message.
+    Generate an answer based on the user's question and provided context.
     """
-
+    # Initialize LLM
     llm = ChatGoogleGenerativeAI(
         model="gemini-1.5-pro",
         temperature=user_input.temperature,
-        max_tokens=None,
-        timeout=None,
         max_retries=2,
     )
+
+    # Format documents for the prompt
+    formatted_docs = (
+        format_relevant_documents(user_input.documents)
+        if user_input.documents else "No relevant documents provided."
+    )
+
+    # Prepare prompt template
     prompt = ChatPromptTemplate.from_messages(
-        messages = [
+        messages=[
             (
                 "system",
-                "You are a question answering chatbot. You must provide the answer in {language}.",
+                """DOCUMENTS: {formatted_docs}
+                
+                INSTRUCTIONS:
+                1. Answer in {language}.
+                2. Use DOCUMENTS whenever possible to ground your response.
+                3. If DOCUMENTS lack enough information, use general knowledge.
+                4. Indicate the source of your response (DOCUMENTS or your knowledge).
+                5. Be concise and prioritize relevant information.
+                
+                QUESTION:
+                {question}""",
             ),
-            ("human", "The question is: {question}"),
+            ("human", "The query is: {question}"),
         ]
     )
 
+    # Invoke the chain
     chain = prompt | llm
-    answer = chain.invoke({
-            "language": user_input.language,
-            "question": user_input.question,
-        }).content
-    return {"message": answer}
+    response = chain.invoke({
+        "language": user_input.language,
+        "question": user_input.question,
+        "formatted_docs": formatted_docs
+    }).content
+    
+    return {"message": response}
