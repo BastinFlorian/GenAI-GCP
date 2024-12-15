@@ -1,8 +1,26 @@
-"""Streamlit app"""
+"""
+This module displays a personalized greeting using Streamlit.
+"""
 import streamlit as st
 
+st.title("Hello, Streamlit!")
 
-st.title('Hello, Streamlit!')
-message = st.text_input('Say something')
-if message:
-    st.write(f'You said: {message}')
+# Add language and gender selection in the sidebar
+language = st.sidebar.selectbox("Language", ["English", "French"])
+gender = st.sidebar.selectbox("Gender", ["Man", "Woman"])
+
+# Get the user's name
+name = st.text_input("Enter your name:")
+
+# Display a personalized greeting based on language and gender
+if name:
+    if language == "English" and gender == "Man":
+        st.write(f"Hello Mr. {name}")
+    elif language == "French" and gender == "Woman":
+        st.write(f"Bonjour madame {name}")
+    elif language == "English" and gender == "Woman":
+        st.write(f"Hello Ms. {name}")
+    elif language == "French" and gender == "Man":
+        st.write(f"Bonjour monsieur {name}")
+    else:
+        st.write(f"Hello {name}")  # default
