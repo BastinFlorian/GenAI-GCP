@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile_api
+    container_name: fastapi-container
+    networks:
+      - my_network
+    ports:
+      - "8383:8282"  # Mappe le port externe 8383 (hôte) au port interne 8282 (conteneur)
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: streamlit-container
+    networks:
+      - my_network
+    ports:
+      - "8702:8602"  # Mappe le port externe 8702 (hôte) au port interne 8602 (conteneur)
+
+networks:
+  my_network:
+    driver: bridge  # Réseau Docker partagé

@@ -1,0 +1,40 @@
+conda env list 
+pip install -r requirements.txt
+uvicorn api:app --host 0.0.0.0 --port 8181
+streamlit run app.py
+# -----------------------------------------
+
+pour tester localment : uvicorn api:app --host 0.0.0.0 --port 8181   et streamlit run app.py
+
+1.  Deploy the FastAPI app: 
+
+ docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/elyesragapi:latest -f Dockerfile_api .
+
+2. Déployer l'application sur Cloud Run/
+
+gcloud run deploy elyesragapi `
+    --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/elyesragapi:latest `
+    --platform=managed `
+    --region=europe-west1 `
+    --allow-unauthenticated `
+    --set-env-vars "GOOGLE_API_KEY=******************,DB_PASSWORD=***********" `
+    --port 8181
+
+3.  Change le HOST dans Streamlit :
+https://elyesragapi-1021317796643.europe-west1.run.app
+
+
+4.  publiez l'image Docker streamlit :
+
+docker buildx build --platform linux/amd64 --push -t europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/elyesragstreamlit:latest -f Dockerfile .
+
+5. Déployer sur Google Cloud Run :
+
+gcloud run deploy elyesrag-streamlit `
+    --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/elyesragstreamlit:latest `
+    --platform=managed `
+    --region=europe-west1 `
+    --allow-unauthenticated `
+    --port 8080
+
+Service URL: https://elyesrag-streamlit-1021317796643.europe-west1.run.app

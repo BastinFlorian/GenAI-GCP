@@ -1,0 +1,11 @@
+# Streamlit
+streamlit
+langchain
+# API
+fastapi
+pydantic
+uvicorn
+pydantic
+langchain_google_genai
+requests
+python-dotenv==1.0.1
