@@ -1,0 +1,11 @@
+# Streamlit
+streamlit
+
+# API
+fastapi
+pydantic
+uvicorn
+pydantic
+requests
+langchain_google_genai
+# autres dépendances...
