@@ -175,3 +175,6 @@ credentials.json
 .terraform.lock.hcl
 terraform.tfstate.backup
 terraform.tfstate
+.env
+env
+*.env

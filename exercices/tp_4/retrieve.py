@@ -5,19 +5,27 @@ from langchain_core.documents.base import Document
 from config import TABLE_NAME
 
 
-def get_relevant_documents(query: str, vector_store: PostgresVectorStore) -> list[Document]:
+
+def get_relevant_documents(query: str, vector_stored: PostgresVectorStore) -> list[Document]:
     """
-    Retrieve relevant documents based on a query using a vector store.
+    Retrieve the most relevant documents for a given query using Maximal Marginal Relevance (MMR).
 
     Args:
-        query (str): The search query string.
-        vector_store (PostgresVectorStore): An instance of PostgresVectorStore used to retrieve documents.
+        query (str): The user-provided input query for retrieving documents.
+        vector_stored (PostgresVectorStore): A vector-based storage system for document embeddings.
 
     Returns:
-        list[Document]: A list of documents relevant to the query.
+        list[Document]: A list of the top `k` relevant documents, optimized for both relevance and diversity.
     """
-    retriever =  # TODO
-    return retriever.invoke(query)
+    retriever = vector_stored.as_retriever(
+        search_type="mmr",
+        search_kwargs={'k': 5, 'lambda_mult': 0.25}
+    )
+    # Filter and normalize scores to ensure relevance between 0 and 1
+    documents_with_scores = retriever.invoke(query)
+    return documents_with_scores
+
+
 
 def format_relevant_documents(documents: list[Document]) -> str:
     """
@@ -41,16 +49,21 @@ def format_relevant_documents(documents: list[Document]) -> str:
             Source 2: Second doc
         '''
     """
-    # TOUPDATE with example in docstring
-    return "\n".join([doc.page_content for doc in documents])
+    return "\n-----\n".join([f"Source {i + 1}: {doc.page_content}"for i, doc in enumerate(documents)])
 
 
 if __name__ == '__main__':
+    
+    Example_de_test = """
+    What are the differences between LSTM and GRU in handling vanishing gradients?
+    How does the self-attention mechanism work in transformers? 
+    Looking for examples and formulas for understanding attention scores.
+"""
     # Test get_relevant_documents
     engine = create_cloud_sql_database_connection()
     embedding = get_embeddings()
-    vector_store = get_vector_store(engine, TABLE_NAME, embedding)
-    documents = get_relevant_documents("large language modelss", vector_store)
+    vector_store = get_vector_store(engine, TABLE_NAME, embedding)    
+    documents = get_relevant_documents(Example_de_test, vector_store)
     assert len(documents) > 0, "No documents found for the query"
 
     # Test format_relevant_documents

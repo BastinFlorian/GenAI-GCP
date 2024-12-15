@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile_api
     container_name: fastapi-container
     networks:
-      - my_network
+      - reseau_dechange
     ports:
       - "8080:8080" # TODO EDIT ACCORDINGLY
 
@@ -17,10 +17,10 @@ services:
       dockerfile: Dockerfile_streamlit
     container_name: streamlit-container
     networks:
-      - my_network
+      - reseau_dechange
     ports:
       - "8501:8501" # TODO EDIT ACCORDINGLY
 
 networks:
-  my_network:
+  reseau_dechange:
     driver: bridge
