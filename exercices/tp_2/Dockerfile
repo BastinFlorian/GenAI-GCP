@@ -1,18 +1,17 @@
-FROM python:3.11
+# Utiliser une image de base Python
+FROM python:3.11-slim
 
+# Installer Streamlit
+RUN pip install streamlit
+
+# Définir le répertoire de travail
 WORKDIR /app
 
-ENV PYTHONUNBUFFERED True
+# Copier l'application dans le conteneur
+COPY . .
 
-COPY requirements.txt /requirements.txt
+# Exposer le port que Streamlit utilisera
+EXPOSE 8080
 
-RUN pip install --no-cache-dir --upgrade -r /requirements.txt
-
-ENV PORT=8080
-
-EXPOSE ${PORT}
-
-COPY . ./app
-
-ENTRYPOINT streamlit run --server.port ${PORT} app/app.py –-server.address=0.0.0.0
-
+# Lancer Streamlit
+CMD ["streamlit", "run", "app.py", "--server.port=8080", "--server.address=0.0.0.0"]

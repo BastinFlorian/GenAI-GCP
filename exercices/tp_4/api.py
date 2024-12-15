@@ -1,4 +1,3 @@
-"""API"""
 import os
 from typing import List
 from langchain_google_vertexai import VertexAIEmbeddings
@@ -19,8 +18,8 @@ load_dotenv()
 app = FastAPI()
 
 # Initialize once and reuse
-ENGINE = # TODO
-EMBEDDING = # TODO
+ENGINE = create_cloud_sql_database_connection() ### TODO
+EMBEDDING = get_embeddings() ### TODO
 
 
 class UserInput(BaseModel):
@@ -44,8 +43,21 @@ class DocumentResponse(BaseModel):
 
 @app.post("/get_sources", response_model=List[DocumentResponse])
 def get_sources(user_input: UserInput) -> List[DocumentResponse]:
-    relevants_docs = # TODO
-    return [{"page_content": doc.page_content, "metadata": doc.metadata} for doc in relevants_docs]
+    vector_store = get_vector_store(ENGINE, TABLE_NAME, EMBEDDING)
+    relevants_docs = get_relevant_documents(
+    f"Retrieve information related to: {user_input.question}",
+    vector_store,
+)
+
+    if not relevants_docs:
+        return []
+
+    # else
+    return [
+        DocumentResponse(page_content=doc.page_content, metadata=doc.metadata)
+        for doc in relevants_docs
+    ]
+
 
 
 
@@ -81,4 +93,4 @@ def answer(user_input: UserInput):
             "language": user_input.language,
             "question": user_input.question,
         }).content
-    return {"message": answer}
+    return {"message": answer}    

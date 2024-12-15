@@ -40,6 +40,7 @@ streamlit run app.py
 
 Open and edit the `Dockerfile` as required to match the port exposed below. We create a Docker image that will contain the Streamlit app. The Dockerfile is already created in the root folder. Refer to the `docker build` and `docker run` documentation. We use Docker because it is mandatory to deploy an app on GCP.
 
+
 ```bash
 docker build -t streamlit:latest .
 docker run --name my_container -p 8080:8080 streamlit:latest

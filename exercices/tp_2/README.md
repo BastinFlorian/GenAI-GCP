@@ -27,7 +27,7 @@ docker run --name fastapi-container -p 8181:8181 api:latest
 Test with a curl command. Edit the localhost with the chosen PORT:
 ```bash
 curl -X 'POST' \
-    'http://localhost:8181/answer' \
+    'http://localhost:8080/answer' \
     -H 'accept: application/json' \
     -H 'Content-Type: application/json' \
     -d '{

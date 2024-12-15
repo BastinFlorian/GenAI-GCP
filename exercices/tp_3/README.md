@@ -65,6 +65,16 @@ gcloud run deploy <my-app-name> \
     --set-env-vars GOOGLE_API_KEY=[INSERT_GOOGLE_API_KEY] \
     --port 8181
 
+    gcloud run deploy fz_api \
+    --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/fz_api:latest \
+    --platform=managed \
+    --region=europe-west1 \
+    --allow-unauthenticated \
+    --set-env-vars GOOGLE_API_KEY="AIzaSyA0BJ-l4g5TYK-Gd0fvK6lJMUIroDsr1rI" \
+    --port 8181
+
+    gcloud run deploy fz-api --image=europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar/fz_api:latest --platform=managed --region=europe-west1 --allow-unauthenticated --set-env-vars GOOGLE_API_KEY="AIzaSyA0BJ-l4g5TYK-Gd0fvK6lJMUIroDsr1rI" --port 8501
+
 # Note that a SECRET KEY like this should be provided by GOOGLE SECRET MANAGER for more safety.
 # For simplicity, we will use the env variable here.
 ```
