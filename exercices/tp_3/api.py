@@ -10,6 +10,7 @@ class UserInput(BaseModel):
     temperature: float
     language: str
 
+
 @app.post("/answer")
 def answer(user_input: UserInput):
     """
