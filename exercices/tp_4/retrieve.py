@@ -35,7 +35,7 @@ def format_relevant_documents(documents: list[Document]) -> str:
     """
     return "\n".join([f"Source {i+1}: {doc.page_content}" for i, doc in enumerate(documents)])
 
-
+##
 if __name__ == '__main__':
     # Test get_relevant_documents
     engine = create_cloud_sql_database_connection()

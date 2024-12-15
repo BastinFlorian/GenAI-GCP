@@ -66,3 +66,6 @@ if question := st.chat_input("What is your question?"):
     else:
         st.write("Error: Unable to get a response from the API")
         st.write(f"The error is: {documents.text}")
+
+
+##

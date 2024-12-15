@@ -55,7 +55,7 @@ def create_cloud_sql_database_connection() -> PostgresEngine:
         db_password=DB_PASSWORD,
     )
     return engine
-
+##
 def create_table_if_not_exists(table_name: str, engine: PostgresEngine) -> None:
     try:
         engine.create_vector_store_table(
