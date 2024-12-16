@@ -1,18 +1,17 @@
-FROM python:3.11
+# Use the official Python image from the Docker Hub
+FROM python:3.12-slim
 
+# Set working directory
 WORKDIR /app
 
-ENV PYTHONUNBUFFERED True
+# Copy requirements and install dependencies
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY requirements.txt /requirements.txt
+# Copy the API file
+COPY api.py ./
 
-RUN pip install --no-cache-dir --upgrade -r /requirements.txt
+# Expose the port
+EXPOSE 8501
 
-ENV PORT=8080
-
-EXPOSE ${PORT}
-
-COPY . ./app
-
-ENTRYPOINT streamlit run --server.port ${PORT} app/app.py –-server.address=0.0.0.0
-
+ENTRYPOINT ["streamlit", "run", "--server.port", "8080", "app/app.py", "--server.address=0.0.0.0"]

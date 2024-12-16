@@ -9,7 +9,7 @@ services:
     networks:
       - my_network
     ports:
-      - "8080:8080" # TODO EDIT ACCORDINGLY
+      - "8181:8181" # Port exposé pour FastAPI
 
   streamlit:
     build:
@@ -19,7 +19,7 @@ services:
     networks:
       - my_network
     ports:
-      - "8501:8501" # TODO EDIT ACCORDINGLY
+      - "8501:8501" # Port exposé pour Streamlit
 
 networks:
   my_network:
