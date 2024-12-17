@@ -1,0 +1,24 @@
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile_api
+    container_name: fastapi-container
+    networks:
+      - my_network
+    ports:
+      - "8181:8181" 
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile_streamlit
+    container_name: streamlit-container
+    networks:
+      - my_network
+    ports:
+      - "8501:8501"  
+
+networks:
+  my_network:
+    driver: bridge

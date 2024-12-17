@@ -1,0 +1,22 @@
+# Streamlit
+streamlit
+
+# API
+fastapi
+pydantic
+uvicorn
+pydantic
+requests
+python-dotenv==1.0.1
+
+langchain-google-genai
+langchain-google-cloud-sql-pg
+langchain-google-vertexai
+langchain_community
+langchain-unstructured
+
+google-cloud-storage
+unstructured
+langchain
+libmagic
+asyncio

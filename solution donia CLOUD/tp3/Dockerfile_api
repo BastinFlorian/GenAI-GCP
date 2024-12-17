@@ -1,0 +1,21 @@
+# Utiliser une image Python légère
+FROM python:3.11-slim
+
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier le fichier requirements.txt dans l'image
+COPY requirements.txt .
+
+# Installer les dépendances
+RUN pip install --no-cache-dir -r requirements.txt \
+    && pip install -qU langchain-google-genai
+
+# Copier le code source dans l'image
+COPY . .
+
+# Exposer le port de l'API
+EXPOSE 8787
+
+# Commande pour lancer l'application
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8787"]
