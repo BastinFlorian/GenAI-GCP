@@ -1,0 +1,22 @@
+
+# Ignorer les fichiers Python compilés
+*.pyc
+*.pyo
+__pycache__/
+
+# Ignorer les fichiers de logs
+*.log
+
+# Ignorer les fichiers d'environnement (pour des raisons de sécurité)
+#*.env
+
+# Ignorer les répertoires Git
+.git
+
+# Ignorer les fichiers Dockerfile et autres fichiers de configuration
+Dockerfile*
+*.md
+
+# Ignorer le répertoire virtuel Python
+venv/
+

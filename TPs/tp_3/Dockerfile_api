@@ -1,0 +1,22 @@
+# Utilisez l'image officielle Python depuis Docker Hub
+FROM python:3.12-slim
+
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /app
+
+# Copier le fichier requirements.txt dans le conteneur
+COPY requirements.txt .
+
+# Installer les dépendances
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip
+RUN pip install fastapi uvicorn python-dotenv langchain-google-genai
+
+# Copier tout le code de l'application dans le conteneur
+COPY . /app
+
+# Exposer le port sur lequel l'API fonctionne
+EXPOSE 8181
+
+# Commande pour démarrer l'API (exécution du fichier api.py)
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8181"]

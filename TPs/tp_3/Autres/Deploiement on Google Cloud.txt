@@ -1,0 +1,7 @@
+ - Les images docker sont déployés sur Google Cloud dans Artifact Registry : europe-west1-docker.pkg.dev/dauphine-437611/my-registry
+
+Vérification de l'existance des images docker dans le registre :
+gcloud artifacts docker images list europe-west1-docker.pkg.dev/dauphine-437611/dauphine-ar
+
+sk_api
+sk-streamlit
