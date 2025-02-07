@@ -19,7 +19,7 @@ BUCKET_NAME = "dauphine-bucket"
 TABLE_NAME = "fb_table"
 
 # API Configuration
-GOOGLE_API_KEY = "AIzaSyA0BJ-l4g5TYK-Gd0fvK6lJMUIroDsr1rI"
+GOOGLE_API_KEY = "#your api key"
 
 # Local Storage
 DOWNLOADED_LOCAL_DIRECTORY = "./downloaded_files"
